@@ -62,7 +62,7 @@ class YamlTest(unittest.TestCase):
 
     def test_read_file(self):
         print("------------------------ test_read_file --------------------------------")
-        with open("/lyndon/iProject/pypath/pyboot/tests/yaml/document.yaml", 'r') as stream:
+        with open("/pyboot/tests/yaml/document.yaml", 'r') as stream:
             for data in yaml.load_all(stream, Loader=yaml.FullLoader):
                 print(data)
 
