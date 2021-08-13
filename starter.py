@@ -1,0 +1,59 @@
+#!/usr/bin/env python 
+# -*- encoding: utf-8 -*- 
+# Project: spd-sxmcc 
+"""
+@file: starter.py
+@author: etl
+@time: Created on 8/13/21 9:37 AM
+@env: Python @desc:
+@ref: @blog:
+"""
+import sys
+
+SystemGroup = 30
+BasicResourcesGroup = 20
+AppGroup = 10
+
+INT_MAX = sys.maxsize
+DEFAULT_PRIORITY = 10000
+
+
+class Starter:
+    def Init(self, starter_context):
+        print("I am a Init")
+
+    def Setup(self, starter_context):
+        print("I am a Setup")
+
+    def Start(self, starter_context):
+        print("I am a Start")
+
+    def Stop(self, starter_context):
+        print("I am a Stop")
+
+    def PriorityGroup(self) -> int:
+        return 0
+
+    def StartBlocking(self) -> bool:
+        return False
+
+    def Priority(self) -> int:
+        return 0
+
+
+# 服务启动注册器
+class starterRegister:
+    nonBlockingStarters = [Starter]
+    blockingStarters = [Starter]
+
+    # 返回所有的启动器
+    def AllStarters(self) -> [Starter]:
+        starters = self.nonBlockingStarters + self.blockingStarters
+        return starters
+
+    # 注册启动器
+    def Register(self, starter: Starter):
+        if starter.StartBlocking():
+            self.blockingStarters = self.blockingStarters.append(starter)
+        else:
+            self.nonBlockingStarters = self.nonBlockingStarters.append(starter)
