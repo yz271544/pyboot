@@ -1,0 +1,13 @@
+---
+name: The Set of Gauntlets 'Pauraegen'
+description: >
+  A set of handgear with sparks that crackle
+  across its knuckleguards.
+env:
+  - JAVA_HOME: /home/etl/java
+  - GO_ROOT: /home/etl/go
+advise_ip:
+  - 127.0.0.1
+  - 192.168.137.1
+  - 172.17.0.1
+

@@ -8,25 +8,33 @@
 @env: Python @desc:
 @ref: @blog:
 """
+from conf import BaseConfig
+from pyboot.logger import log
+from pyboot.starter import GetStarters
 from starter_context import StarterContext
 
 
 # 应用程序
 class BootApplication:
 	IsTest: bool
-	# conf: kvs.ConfigSource
+	conf: BaseConfig
 	starterCtx: StarterContext
 
-	# def __init__(self):
+	# 构造系统
+	def __init__(self, IsTest: bool, conf: BaseConfig, starterCtx: StarterContext):
+		self.IsTest = IsTest
+		self.conf = conf
+		self.starterCtx = starterCtx
 
-#
-# # 构造系统
-# def New(conf kvs.ConfigSource) *BootApplication {
-# 	e := &BootApplication{conf: conf, starterCtx: StarterContext{}}
-# 	e.starterCtx.SetProps(conf)
-# 	return e
-# }
-#
+	def init(self):
+		log.info("Initializing starters...")
+		for starter in GetStarters():
+			log.Debugf("Initializing: PriorityGroup=%d,Priority=%d", self.PriorityGroup(), self.Priority())
+			starter.Init(self.starterCtx)
+
+	# def Start(self):
+
+
 # func (b *BootApplication) Start() {
 # 	//1. 初始化starter
 # 	b.init()
