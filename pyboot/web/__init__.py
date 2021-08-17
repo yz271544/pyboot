@@ -8,3 +8,11 @@
 @env: Python @desc:
 @ref: @blog:
 """
+from pyboot.utils.common import WebValidator
+
+webApp = None
+
+
+def WebApp():
+    WebValidator.Check(webApp)
+    return webApp
