@@ -10,10 +10,13 @@
 """
 import os
 import yaml
-from conf import BaseConfig
+from pyboot.conf.conf import BaseConfig
 from pprint import pprint
 
-conf = os.path.join(os.getcwd(), "pyboot/conf/config.yaml")
+from pyboot.conf.settings import PYBOOT_HOME
+
+print("PWD:", os.getcwd())
+conf = os.path.join(PYBOOT_HOME, "conf/config.yaml")
 df = open(conf, 'r')
 config = yaml.load_all(df.read(), Loader=yaml.FullLoader)
 print(config)
