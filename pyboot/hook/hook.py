@@ -20,9 +20,6 @@ class HookStarter(BaseStarter):
         self.callbacks = []
 
     def sig_handler(self, starter_context: StarterContext):
-        # for starter in GetStarters():
-        #     print("stop starter:", starter.__class__.name)
-        #     starter.Stop(starter_context)
         for fn in self.callbacks:
             fn(starter_context)
 
@@ -33,8 +30,8 @@ class HookStarter(BaseStarter):
         return
 
     def Setup(self, starter_context: StarterContext):
-        signal.signal(signal.SIGINT, lambda x: self.sig_handler(x))
-        signal.signal(signal.SIGTERM, lambda x: self.sig_handler(x))
+        signal.signal(signal.SIGINT, lambda: self.sig_handler(starter_context))
+        signal.signal(signal.SIGTERM, lambda: self.sig_handler(starter_context))
         return
 
     def Start(self, starter_context: StarterContext):
