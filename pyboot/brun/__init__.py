@@ -8,6 +8,7 @@
 @env: Python @desc:
 @ref: @blog:
 """
+from pyboot.hook.hook import HookStarter
 from pyboot.logger import log
 from pyboot.starter import StarterRegister
 from pyboot.conf.base_conf_starter import BaseConfStarter
@@ -17,4 +18,5 @@ log.info("brun __init__ start")
 starterRegister = StarterRegister()
 starterRegister.Register(BaseConfStarter())
 starterRegister.Register(TornadoServer())
+starterRegister.Register(HookStarter())
 log.info("brun __init__ end")

@@ -10,7 +10,7 @@
 """
 import signal
 
-from pyboot.starter import BaseStarter
+from pyboot.starter import BaseStarter, GetStarters
 from pyboot.starter_context import StarterContext
 
 
@@ -18,36 +18,21 @@ class HookStarter(BaseStarter):
     def __init__(self):
         self.callbacks = []
 
-    def sig_handler(self):
-        # for starter in
-        pass
+    def sig_handler(self, starter_context: StarterContext):
+        # for starter in GetStarters():
+        #     print("stop starter:", starter.__class__.name)
+        #     starter.Stop(starter_context)
+        for fn in self.callbacks:
+            fn(starter_context)
 
     def Init(self, starter_context: StarterContext):
-        signal.signal(signal.SIGINT, self.sig_handler)
-        signal.signal(signal.SIGTERM, self.sig_handler)
-
-
-
-
-        # signal.signal(signal.SIGINT, sig_handler)
-        #
-        #
-        # signal.Notify(sigs, syscall.SIGQUIT, syscall.SIGTERM)
-        # go func()
-        # {
-        # for {
-        #     c := < -sigs
-        # log.Info("notify: ", c)
-        # for _, fn := range callbacks {
-        # fn()
-        # }
-        # break
-        # os.Exit(0)
-
-
+        for starter in GetStarters():
+            self.callbacks.append(starter.Stop)
         return
 
     def Setup(self, starter_context: StarterContext):
+        signal.signal(signal.SIGINT, lambda x: self.sig_handler(x))
+        signal.signal(signal.SIGTERM, lambda x: self.sig_handler(x))
         return
 
     def Start(self, starter_context: StarterContext):

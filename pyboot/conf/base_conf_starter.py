@@ -28,3 +28,6 @@ class BaseConfStarter(BaseStarter):
         log.info("BaseConfStarter Init end")
         return
 
+    def Stop(self, starter_context):
+        log.info("BaseConfStarter Stop Begin...")
+        log.info("BaseConfStarter Stop END...")

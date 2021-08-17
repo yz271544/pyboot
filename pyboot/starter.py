@@ -9,10 +9,10 @@
 @ref: @blog:
 """
 import sys
-import functools
+# import functools
 import threading
-from pyboot.core.core import Singleton
-from starter_context import StarterContext
+# from pyboot.core.core import Singleton
+# from starter_context import StarterContext
 
 SystemGroup = 30
 BasicResourcesGroup = 20
@@ -23,16 +23,16 @@ DEFAULT_PRIORITY = 10000
 
 
 class Starter:
-    def Init(self, starter_context: StarterContext):
+    def Init(self, starter_context):
         return
 
-    def Setup(self, starter_context: StarterContext):
+    def Setup(self, starter_context):
         return
 
-    def Start(self, starter_context: StarterContext):
+    def Start(self, starter_context):
         return
 
-    def Stop(self, starter_context: StarterContext):
+    def Stop(self, starter_context):
         return
 
     def PriorityGroup(self) -> int:
@@ -83,7 +83,7 @@ class StarterRegister:
 
 # 注册starter
 def Register(starter: Starter):
-    StarterRegister.Register(starter)
+    StarterRegister().Register(starter)
 
 
 #排序starter
@@ -101,22 +101,22 @@ def Register(starter: Starter):
 
 
 # 获取所有注册的starter
-# def GetStarters() -> [Starter]:
-#     return StarterRegister.AllStarters()
+def GetStarters() -> [Starter]:
+    return StarterRegister().AllStarters()
 
 
 # 默认的空实现,方便资源启动器的实现
 class BaseStarter(Starter):
-    def Init(self, starter_context: StarterContext):
+    def Init(self, starter_context):
         return
 
-    def Setup(self, starter_context: StarterContext):
+    def Setup(self, starter_context):
         return
 
-    def Start(self, starter_context: StarterContext):
+    def Start(self, starter_context):
         return
 
-    def Stop(self, starter_context: StarterContext):
+    def Stop(self, starter_context):
         return
 
     def PriorityGroup(self) -> int:
