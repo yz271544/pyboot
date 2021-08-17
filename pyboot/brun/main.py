@@ -24,5 +24,6 @@ if __name__ == '__main__':
 
     startContext = StarterContext().SetProps(baseConf)
 
-    app = BootApplication(False, startContext, starterRegister)
+    # app = BootApplication(False, startContext, starterRegister)
+    app = BootApplication(False, startContext)
     app.Start()

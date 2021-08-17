@@ -21,6 +21,8 @@ AppGroup = 10
 INT_MAX = sys.maxsize
 DEFAULT_PRIORITY = 10000
 
+nonBlockingStarters = []
+blockingStarters = []
 
 class Starter:
     def Init(self, starter_context):
@@ -50,31 +52,33 @@ class StarterRegister:
     _instance_lock = threading.Lock()
 
     def __init__(self, *args, **kwargs):
-        self.nonBlockingStarters = []
-        self.blockingStarters = []
+        pass
 
-    def __new__(cls):
-        if not hasattr(cls, '_instance'):
+    @classmethod
+    def get_instance(cls, *args, **kwargs):
+        if not hasattr(StarterRegister, '_instance'):
             with StarterRegister._instance_lock:
-                if not hasattr(cls, '_instance'):
-                    StarterRegister._instance = super().__new__(cls)
+                if not hasattr(StarterRegister, '_instance'):
+                    StarterRegister._instance = StarterRegister(*args, **kwargs)
 
-            return StarterRegister._instance
+        return StarterRegister._instance
 
-        # self.nonBlockingStarters = [Starter]
-        # self.blockingStarters = [Starter]
 
     # 返回所有的启动器
     def AllStarters(self) -> []:
-        starters = self.nonBlockingStarters + self.blockingStarters
+        global nonBlockingStarters
+        global blockingStarters
+        starters = nonBlockingStarters + blockingStarters
         return starters
 
     # 注册启动器
     def Register(self, starter):
+        global nonBlockingStarters
+        global blockingStarters
         if starter.StartBlocking():
-            self.blockingStarters.append(starter)
+            blockingStarters.append(starter)
         else:
-            self.nonBlockingStarters.append(starter)
+            nonBlockingStarters.append(starter)
 
 
 # StarterRegister = StarterRegister()

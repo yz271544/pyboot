@@ -10,6 +10,7 @@
 """
 import signal
 
+from pyboot.logger import log
 from pyboot.starter import BaseStarter, GetStarters
 from pyboot.starter_context import StarterContext
 
@@ -27,6 +28,7 @@ class HookStarter(BaseStarter):
 
     def Init(self, starter_context: StarterContext):
         for starter in GetStarters():
+            log.debug("starter name:%s", starter.__class__.__name__)
             self.callbacks.append(starter.Stop)
         return
 

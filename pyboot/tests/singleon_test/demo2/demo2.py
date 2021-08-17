@@ -20,7 +20,8 @@ class Singleton(object):
     _instance_lock = threading.Lock()
 
     def __init__(self, *args, **kwargs):
-        time.sleep(1)
+        # time.sleep(1)
+        pass
 
     @classmethod
     def get_instance(cls, *args, **kwargs):

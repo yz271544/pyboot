@@ -26,3 +26,6 @@ class BaseTest(unittest.TestCase):
         a2 = [5, 6, 7, 8]
         a = a1 + a2
         print(a)
+
+    def test_class_name(self):
+        print(BaseTest.__name__)
