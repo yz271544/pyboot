@@ -11,6 +11,10 @@
 
 from attrdict import AttrDict
 
+from pyboot.utils.error.Errors import ApplicationError, EgonException
+
+KeyProps = "_conf"
+
 
 class AliasedAttrDict(AttrDict):
     context = {}
@@ -28,6 +32,16 @@ class AliasedAttrDict(AttrDict):
 
 class StarterContext(AliasedAttrDict):
     context = {}
+
+    def Props(self):
+        try:
+            p = self.context[KeyProps]
+            return p
+        except:
+            raise EgonException("配置还没有被初始化")
+
+    def SetProps(self, conf):
+        self.context[KeyProps] = conf
 
 
 if __name__ == '__main__':

@@ -29,4 +29,4 @@ plog = Plog()
 plog.set_logger(when='D', limit=1, level=loggerLevel, filename=None, mode='w',
                 fmt=logFormatDict[loggerFormat])
 
-log = plog.g_logger
+log = plog.get_logger_instance()

@@ -26,79 +26,42 @@ class BootApplication:
 		self.conf = conf
 		self.starterCtx = starterCtx
 
+	# 程序初始化
 	def init(self):
 		log.info("Initializing starters...")
 		for starter in GetStarters():
 			log.Debugf("Initializing: PriorityGroup=%d,Priority=%d", self.PriorityGroup(), self.Priority())
 			starter.Init(self.starterCtx)
 
-	# def Start(self):
+	# 程序安装
+	def setup(self):
+		log.Info("Setup starters...")
+		for starter in GetStarters():
+			starter.Setup(self.starterCtx)
 
+	# 程序开始运行，开始接受调用
+	def start(self):
+		log.Info("Starting starters...")
+		for starter in GetStarters():
+			if self.starterCtx.Props().get("testing"):
+				starter.Start(self.starterCtx)
+				continue
+			if starter.StartBlocking() is False:
+				starter.Start(self.starterCtx)
+		for starter in GetStarters():
+			if starter.StartBlocking():
+				starter.Start(self.starterCtx)
 
-# func (b *BootApplication) Start() {
-# 	//1. 初始化starter
-# 	b.init()
-# 	//2. 安装starter
-# 	b.setup()
-# 	//3. 启动starter
-# 	b.start()
-# }
-#
-# //程序初始化
-# func (e *BootApplication) init() {
-# 	log.Info("Initializing starters...")
-# 	for _, v := range GetStarters() {
-# 		typ := reflect.TypeOf(v)
-# 		log.Debugf("Initializing: PriorityGroup=%d,Priority=%d,type=%s", v.PriorityGroup(), v.Priority(), typ.String())
-# 		v.Init(e.starterCtx)
-# 	}
-# }
-#
-# //程序安装
-# func (e *BootApplication) setup() {
-#
-# 	log.Info("Setup starters...")
-# 	for _, v := range GetStarters() {
-# 		typ := reflect.TypeOf(v)
-# 		log.Debug("Setup: ", typ.String())
-# 		v.Setup(e.starterCtx)
-# 	}
-#
-# }
-#
-# //程序开始运行，开始接受调用
-# func (e *BootApplication) start() {
-#
-# 	log.Info("Starting starters...")
-# 	for i, v := range GetStarters() {
-#
-# 		typ := reflect.TypeOf(v)
-# 		log.Debug("Starting: ", typ.String())
-# 		if e.starterCtx.Props().GetBoolDefault("testing", false) {
-# 			go v.Start(e.starterCtx)
-# 			continue
-# 		}
-#
-# 		if v.StartBlocking() {
-# 			if i+1 == len(GetStarters()) {
-# 				v.Start(e.starterCtx)
-# 			} else {
-# 				go v.Start(e.starterCtx)
-# 			}
-# 		} else {
-# 			v.Start(e.starterCtx)
-# 		}
-#
-# 	}
-# }
-#
-# //程序开始运行，开始接受调用
-# func (e *BootApplication) Stop() {
-#
-# 	log.Info("Stoping starters...")
-# 	for _, v := range GetStarters() {
-# 		typ := reflect.TypeOf(v)
-# 		log.Debug("Stoping: ", typ.String())
-# 		v.Stop(e.starterCtx)
-# 	}
-# }
+	# 程序开始运行，开始接受调用
+	def Stop(self):
+		log.Info("Stoping starters...")
+		for starter in GetStarters():
+			starter.Stop(self.starterCtx)
+
+	def Start(self):
+		# 1.初始化starter
+		self.init()
+		# 2. 安装starter
+		self.setup()
+		# 3. 启动starter
+		self.start()
