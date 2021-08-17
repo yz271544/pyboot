@@ -20,6 +20,7 @@ class HookStarter(BaseStarter):
         self.callbacks = []
 
     def sig_handler(self, starter_context: StarterContext):
+        log.info("start sig_handler")
         for fn in self.callbacks:
             fn(starter_context)
 
