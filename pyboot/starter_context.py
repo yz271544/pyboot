@@ -42,6 +42,7 @@ class StarterContext(AliasedAttrDict):
 
     def SetProps(self, conf):
         self.context[KeyProps] = conf
+        return self
 
 
 if __name__ == '__main__':

@@ -8,18 +8,21 @@
 @env: Python @desc:
 @ref: @blog:
 """
-import pyboot.brun
+from pyboot.brun import starterRegister
 from pyboot.boot import BootApplication
 from pyboot.conf import getBaseConf
 from pyboot.logger import log
 from pyboot.starter_context import StarterContext
 
 if __name__ == '__main__':
-    confArr = getBaseConf()
-    for conf in confArr:
-        log.info("conf:{%s}", conf)
+    # confArr = getBaseConf()
+    # for conf in confArr:
+    #     log.info("conf:{%s}", conf)
+    baseConf = getBaseConf()
 
     log.info("brun main")
 
-    app = BootApplication(False, confArr, StarterContext().SetProps(confArr))
+    startContext = StarterContext().SetProps(baseConf)
+
+    app = BootApplication(False, startContext, starterRegister)
     app.Start()

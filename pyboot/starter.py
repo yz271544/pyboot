@@ -10,6 +10,8 @@
 """
 import sys
 import functools
+import threading
+from pyboot.core.core import Singleton
 from starter_context import StarterContext
 
 SystemGroup = 30
@@ -44,25 +46,39 @@ class Starter:
 
 
 # 服务启动注册器
-class starterRegister:
-    nonBlockingStarters = [Starter]
-    blockingStarters = [Starter]
+class StarterRegister:
+    _instance_lock = threading.Lock()
+
+    def __init__(self, *args, **kwargs):
+        self.nonBlockingStarters = []
+        self.blockingStarters = []
+
+    def __new__(cls):
+        if not hasattr(cls, '_instance'):
+            with StarterRegister._instance_lock:
+                if not hasattr(cls, '_instance'):
+                    StarterRegister._instance = super().__new__(cls)
+
+            return StarterRegister._instance
+
+        # self.nonBlockingStarters = [Starter]
+        # self.blockingStarters = [Starter]
 
     # 返回所有的启动器
-    def AllStarters(self) -> [Starter]:
+    def AllStarters(self) -> []:
         starters = self.nonBlockingStarters + self.blockingStarters
         return starters
 
     # 注册启动器
-    def Register(self, starter: Starter):
+    def Register(self, starter):
         if starter.StartBlocking():
-            self.blockingStarters = self.blockingStarters.append(starter)
+            self.blockingStarters.append(starter)
         else:
-            self.nonBlockingStarters = self.nonBlockingStarters.append(starter)
+            self.nonBlockingStarters.append(starter)
 
 
-StarterRegister = starterRegister()
-Starters = [Starter]
+# StarterRegister = StarterRegister()
+# Starters = [Starter]
 
 
 # 注册starter
@@ -71,22 +87,22 @@ def Register(starter: Starter):
 
 
 #排序starter
-def SortStarters():
-    def cmp(a, b):
-        # 这个函数按照类Intervals的属性end降序排序
-        if a.PriorityGroup() > b.PriorityGroup():
-            return -1
-        if a.Priority() > b.Priority():
-            return 1
-        return 0
-
-    starters = sorted(Starters, key=functools.cmp_to_key(cmp))
-    return starters
+# def SortStarters():
+#     def cmp(a, b):
+#         # 这个函数按照类Intervals的属性end降序排序
+#         if a.PriorityGroup() > b.PriorityGroup():
+#             return -1
+#         if a.Priority() > b.Priority():
+#             return 1
+#         return 0
+#
+#     starters = sorted(Starters, key=functools.cmp_to_key(cmp))
+#     return starters
 
 
 # 获取所有注册的starter
-def GetStarters() -> [Starter]:
-    return StarterRegister.AllStarters()
+# def GetStarters() -> [Starter]:
+#     return StarterRegister.AllStarters()
 
 
 # 默认的空实现,方便资源启动器的实现

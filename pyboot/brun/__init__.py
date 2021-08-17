@@ -9,11 +9,12 @@
 @ref: @blog:
 """
 from pyboot.logger import log
-from pyboot.starter import Register
+from pyboot.starter import StarterRegister
 from pyboot.conf.base_conf_starter import BaseConfStarter
 from pyboot.web.tornado.tornado_server import TornadoServer
 
 log.info("brun __init__ start")
-Register(BaseConfStarter())
-Register(TornadoServer())
+starterRegister = StarterRegister()
+starterRegister.Register(BaseConfStarter())
+starterRegister.Register(TornadoServer())
 log.info("brun __init__ end")

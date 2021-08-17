@@ -8,6 +8,7 @@
 @env: Python @desc:
 @ref: @blog:
 """
+from pyboot.logger import log
 from pyboot.starter import BaseStarter
 from pyboot.starter_context import StarterContext
 
@@ -20,8 +21,10 @@ def Props():
 
 class BaseConfStarter(BaseStarter):
     def Init(self, starter_context: StarterContext):
+        log.info("BaseConfStarter Init start")
         global global_conf
         global_conf = starter_context.Props()
-        print("初始化配置")
+        log.info("初始化配置")
+        log.info("BaseConfStarter Init end")
         return
 

@@ -8,6 +8,7 @@
 @env: Python @desc:
 @ref: @blog:
 """
+from pyboot.logger import log
 from pyboot.starter import BaseStarter
 from pyboot.starter_context import StarterContext
 
@@ -15,7 +16,8 @@ from pyboot.starter_context import StarterContext
 class TornadoServer(BaseStarter):
 
     def Init(self, starter_context: StarterContext):
-
+        log.info("TornadoServer Init start")
+        log.info("TornadoServer Init end")
         return
 
     def Setup(self, starter_context: StarterContext):
