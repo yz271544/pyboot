@@ -11,7 +11,7 @@
 
 from attrdict import AttrDict
 
-from pyboot.utils.error.Errors import ApplicationError, EgonException
+from pyboot.utils.error.Errors import EgonException
 
 KeyProps = "_conf"
 

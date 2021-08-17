@@ -8,7 +8,7 @@
 @env: Python @desc:
 @ref: @blog:
 """
-from conf import BaseConfig
+from pyboot.conf import BaseConfig
 from pyboot.logger import log
 from pyboot.starter import GetStarters
 from starter_context import StarterContext
@@ -30,7 +30,7 @@ class BootApplication:
 	def init(self):
 		log.info("Initializing starters...")
 		for starter in GetStarters():
-			log.Debugf("Initializing: PriorityGroup=%d,Priority=%d", self.PriorityGroup(), self.Priority())
+			log.Debugf("Initializing: PriorityGroup=%d,Priority=%d", starter.PriorityGroup(), starter.Priority())
 			starter.Init(self.starterCtx)
 
 	# 程序安装
