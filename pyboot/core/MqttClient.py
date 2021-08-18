@@ -68,7 +68,10 @@ class MqttClient:
 
     def run_consumer(self):
         # client = self.connect_mqtt(self.topic)
-        self.client.loop_forever()
+        try:
+            self.client.loop_forever()
+        except Exception as e:
+            print(f"loop_forever error:{e}")
 
     def run_publish(self, message):
         # client = self.connect_mqtt(self.topic)
@@ -78,12 +81,12 @@ class MqttClient:
             result = self.client.publish(self.topic, message, self.qos)
             # result: [0, 1]
             status = result[0]
-            if status != 0:
+            if status == 0:
+                print(f"Send {message} to topic {self.topic}")
+                break
+            else:
+                print(f"Failed to send message to topic {self.topic}")
                 raise SystemUnknownError(f"publish the mqtt broker failed!{self.topic}")
-            # if status == 0:
-            #     print(f"Send {message} to topic {self.topic}")
-            # else:
-            #     print(f"Failed to send message to topic {self.topic}")
 
     # def publish(self, client, msg):
     #     while True:

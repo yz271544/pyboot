@@ -25,7 +25,7 @@ class ProcessorStarter(BaseStarter):
         log.info("ProcessorStarter Init start")
         props = Props()
         # print(props.__class__.__name__) # BaseConfig
-        self.props = BaseConfig(props)
+        self.props = props
         log.info("初始化配置")
         log.info("ProcessorStarter Init end")
         return
