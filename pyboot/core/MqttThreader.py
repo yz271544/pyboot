@@ -21,7 +21,7 @@ from pyboot.utils.error.Errors import UnknownArgNum
 
 MAX_QUEUE = 1000
 TIME_OUT = 120
-MAX_EDGE_NUM = 1
+MAX_EDGE_NUM = 10
 
 
 class MqttThreader:
@@ -54,7 +54,7 @@ class MqttThreader:
             message = msg.payload.decode('utf-8')
             try:
                 log.debug(f"pre_on_message get message from mqtt:{message}")
-                pre_queue.put(message, block=True, timeout=TIME_OUT)
+                pre_queue.put(message, block=False, timeout=TIME_OUT)
             except Exception as e:
                 log.debug(f"put msg to the pre_queue Exception:{e}, queue:{pre_queue.qsize()}")
 
@@ -65,6 +65,16 @@ class MqttThreader:
         except Exception as e:
             log.debug(f"consume mqtt failed!{e}")
             pass
+
+    def post_threader_t(self):
+        print("post_threader_t")
+        while True:
+            try:
+                data = self.pre_queue.get(block=True, timeout=TIME_OUT)
+                log.debug(f"post_threader get data:{data}")
+            except Exception as e:
+                log.debug(f"get from the pre_queue Exception:{e}, queue:{self.pre_queue.qsize()}")
+                pass
 
     def post_threader(self):
         mqtt_client = MqttClient(self.post_broker, self.post_port, self.post_topic, self.post_qos,
@@ -107,14 +117,17 @@ class MqttThreader:
 
     def make_run_thead(self):
         reading_thread = threading.Thread(target=self.pre_threader, args=(self.pre_queue,))
-        # reading_thread.daemon = True
+        reading_thread.daemon = True
         writing_thread = threading.Thread(target=self.post_threader)
-        # writing_thread.daemon = True
-
-        for i in range(MAX_EDGE_NUM):
-            edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(i,))
-            # edge_model_thread.daemon = True
-            edge_model_thread.start()
-
+        writing_thread.daemon = True
+        edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(0,))
+        edge_model_thread.daemon = True
         reading_thread.start()
         writing_thread.start()
+        edge_model_thread.start()
+        # for i in range(MAX_EDGE_NUM):
+        #     edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(i,))
+        #     edge_model_thread.daemon = True
+        #     edge_model_thread.start()
+
+
