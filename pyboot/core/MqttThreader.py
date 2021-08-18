@@ -99,7 +99,7 @@ class MqttThreader:
                 except Exception as e:
                     log.debug(f"put msg to the post_queue Exception:{i} - {e}, queue:{self.post_queue.qsize()}")
 
-    def make_thead(self):
+    def make_run_thead(self):
         reading_thread = threading.Thread(target=self.pre_threader, args=(self.pre_queue,))
         reading_thread.daemon = True
         writing_thread = threading.Thread(target=self.post_threader)

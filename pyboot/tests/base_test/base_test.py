@@ -27,3 +27,11 @@ class BaseClazz(object):
 def test_class_name1():
     ba1 = BaseClazz()
     print(ba1.__class__.__name__)
+
+
+@pytest.mark.base
+def test_for_range():
+    sa = 2
+    for i in range(sa):
+        print("i ---> ", i)
+
