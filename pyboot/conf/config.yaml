@@ -1,13 +1,15 @@
 ---
-name: The Set of Gauntlets 'Pauraegen'
-description: >
-  A set of handgear with sparks that crackle
-  across its knuckleguards.
-env:
-  - JAVA_HOME: /home/etl/java
-  - GO_ROOT: /home/etl/go
-advise_ip:
-  - 127.0.0.1
-  - 192.168.137.1
-  - 172.17.0.1
+app_name: pyboot
+description: pyboot for edge calc
+edge:
+  - instance: 2
+    pre_broker: 192.168.241.1
+    pre_port: 1883
+    pre_topic: /gridsum/test/telm/in/m1
+    pre_qos: 0
+    edge_mode: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
+    post_broker: 192.168.241.1
+    post_port: 1883
+    post_topic: /gridsum/test/telm/out/m1
+    post_qos: 0
 

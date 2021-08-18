@@ -10,8 +10,7 @@
 """
 import os
 import yaml
-from pyboot.conf.conf import BaseConfig
-from pprint import pprint
+from pyboot.conf.config import BaseConfig
 
 from pyboot.conf.settings import PYBOOT_HOME
 
@@ -22,10 +21,10 @@ config = yaml.load(df.read(), Loader=yaml.FullLoader)
 print(config)
 baseConfig = BaseConfig(**config)
 print("baseConfig:", baseConfig)
-print(baseConfig.name)
-print(baseConfig.description)
-print(baseConfig.env)
-print(baseConfig.advise_ip)
+# print(baseConfig.name)
+# print(baseConfig.description)
+# print(baseConfig.env)
+# print(baseConfig.advise_ip)
 
 
 def getBaseConf() -> BaseConfig:
