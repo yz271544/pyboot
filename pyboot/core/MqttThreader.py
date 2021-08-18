@@ -87,6 +87,7 @@ class MqttThreader:
                 pass
 
     def edge_model_calc(self, i):
+        print(f"edge_model_calc:{i}")
         while True:
             in_data = None
             out_data = None
@@ -109,10 +110,11 @@ class MqttThreader:
         # reading_thread.daemon = True
         writing_thread = threading.Thread(target=self.post_threader)
         # writing_thread.daemon = True
-        reading_thread.start()
-        writing_thread.start()
+
         for i in range(MAX_EDGE_NUM):
             edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(i,))
             # edge_model_thread.daemon = True
             edge_model_thread.start()
 
+        reading_thread.start()
+        writing_thread.start()
