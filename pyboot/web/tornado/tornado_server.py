@@ -8,9 +8,8 @@
 @env: Python @desc:
 @ref: @blog:
 """
-import signal
 import time
-
+import sys
 from pyboot import web
 from pyboot.logger import log
 from pyboot.starter import BaseStarter
@@ -43,14 +42,9 @@ class TornadoServer(BaseStarter):
 
     def Start(self, starter_context: StarterContext):
         app = WebApp()
-        # wApp.listen(SERV_PORT)
-        # tornado.ioloop.IOLoop.instance().start()
         global httpServer
         httpServer = tornado.httpserver.HTTPServer(app, xheaders=True)
         httpServer.listen(SERV_PORT)
-
-        signal.signal(signal.SIGINT, self.sig_handler)
-        signal.signal(signal.SIGTERM, self.sig_handler)
 
         tornado.ioloop.IOLoop.instance().start()
         log.info("Exit...")
@@ -58,12 +52,9 @@ class TornadoServer(BaseStarter):
 
     def Stop(self, starter_context: StarterContext):
         print("tornado Stop begin")
-        httpServer.stop()
-        # silence StreamClosedError Tornado is throwing after it is stopped
-        ioloop = tornado.ioloop.IOLoop.instance()
-        ioloop.add_callback(ioloop.stop)
+        self.sig_handler()
         print("tornado Stop end")
-        return
+        sys.exit(0)
 
     def StartBlocking(self) -> bool:
         return True
@@ -79,8 +70,7 @@ class TornadoServer(BaseStarter):
         ]
         return routes
 
-    def sig_handler(self, sig, frame):
-        log.warn("Caught Signal: %s", sig)
+    def sig_handler(self):
         tornado.ioloop.IOLoop.instance().add_callback(self.shutdown)
 
     def shutdown(self):
