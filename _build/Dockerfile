@@ -7,7 +7,7 @@ RUN pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/s
 ENV PYTHONPATH "/home/work"
 
 WORKDIR /home/work
-COPY ./pyboot /home/work
+COPY ./pyboot /home/work/pyboot
 
 CMD ["python", "brun/main.py"]
 ENTRYPOINT ["sh", "-c"]

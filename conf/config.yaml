@@ -1,0 +1,16 @@
+---
+app_name: pyboot
+description: pyboot for edge calc
+edge:
+  - name: telm_temperature
+    instance: 1
+    pre_broker: 192.168.241.1
+    pre_port: 1883
+    pre_topic: /gridsum/test/telm/in/m1
+    pre_qos: 0
+    edge_mode: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
+    post_broker: 192.168.241.1
+    post_port: 1883
+    post_topic: /gridsum/test/telm/out/m1
+    post_qos: 0
+
