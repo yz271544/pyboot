@@ -256,16 +256,16 @@ class Plog:
 # set_logger()
 # set_logger(when='D', limit=1, level='DEBUG:INFO', filename='yyy.log', mode='w', fmt=standard_format)
 
-if __name__ == '__main__':
-    # import_log_funcs()
-    log = Plog()
-    standard_format = '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]' \
-                      '[%(levelname)s][%(message)s]'
-    # log.set_logger(when='D', limit=1, level='DEBUG:INFO', filename='yyy.log', mode='w', fmt=standard_format)
-    log.set_logger(when='D', limit=1, level='DEBUG:INFO', filename=None, mode='w', fmt=standard_format)
-    log.g_logger.info("123")
-    log.g_logger.error("error")
-    log.g_logger.debug('debug')
-    log.g_logger.critical('critical')
-    log.g_logger.warning('warning')
-    log.g_logger.exception('exception')
+# if __name__ == '__main__':
+#     # import_log_funcs()
+#     log = Plog()
+#     standard_format = '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]' \
+#                       '[%(levelname)s][%(message)s]'
+#     # log.set_logger(when='D', limit=1, level='DEBUG:INFO', filename='yyy.log', mode='w', fmt=standard_format)
+#     log.set_logger(when='D', limit=1, level='DEBUG:INFO', filename=None, mode='w', fmt=standard_format)
+#     log.g_logger.info("123")
+#     log.g_logger.error("error")
+#     log.g_logger.debug('debug')
+#     log.g_logger.critical('critical')
+#     log.g_logger.warning('warning')
+#     log.g_logger.exception('exception')

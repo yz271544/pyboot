@@ -15,9 +15,9 @@ import os
 import sys
 
 
-print('__file__={0:<35} | __name__={1:<20} | __package__={2:<20}'.format(__file__, __name__, str(__package__)))
+# print('__file__={0:<35} | __name__={1:<20} | __package__={2:<20}'.format(__file__, __name__, str(__package__)))
 # 调试模式是否开启
-DEBUG = True
+DEBUG = False
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -47,12 +47,12 @@ try:
     PYBOOT_HOME = os.environ["PYBOOT_HOME"]
 except Exception as e:
     curPath = os.path.abspath(os.path.dirname(__file__))
-    print("settings curPath:", curPath)
+    # print("settings curPath:", curPath)
     rootPath = os.path.split(curPath)[0]
-    print("settings rootPath:", rootPath)
+    # print("settings rootPath:", rootPath)
     PYBOOT_HOME = rootPath
     sys.path.append(rootPath)
-    print("settings sys.path:", sys.path)
+    # print("settings sys.path:", sys.path)
     # PYBOOT_HOME = os.getcwd()
 
 sys.path.append(os.path.dirname(os.getcwd()))

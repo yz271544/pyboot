@@ -14,13 +14,13 @@ from pyboot.conf.config import BaseConfig
 
 from pyboot.conf.settings import PYBOOT_HOME
 
-print("PWD:", os.getcwd())
+# print("PWD:", os.getcwd())
 conf = os.path.join(PYBOOT_HOME, "conf/config.yaml")
 df = open(conf, 'r')
 config = yaml.load(df.read(), Loader=yaml.FullLoader)
-print(config)
+# print(config)
 baseConfig = BaseConfig(**config)
-print("baseConfig:", baseConfig)
+# print("baseConfig:", baseConfig)
 # print(baseConfig.name)
 # print(baseConfig.description)
 # print(baseConfig.env)

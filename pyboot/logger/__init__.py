@@ -6,16 +6,17 @@ try:
     LOGGER_HOME = os.environ["LOGGER_HOME"]
 except Exception as e:
     curPath = os.path.abspath(os.path.dirname(__file__))
-    print("settings curPath:", curPath)
+    # print("settings curPath:", curPath)
     rootPath = os.path.split(curPath)[0]
-    print("settings rootPath:", rootPath)
+    # print("settings rootPath:", rootPath)
     LOGGER_HOME = rootPath
     sys.path.append(rootPath)
-    print("settings sys.path:", sys.path)
+    # print("settings sys.path:", sys.path)
 
 loggerDir = 'logs'
 loggerFileName = 'py-logger.log'
-loggerLevel = 'DEBUG:INFO'
+# loggerLevel = 'DEBUG:INFO'
+loggerLevel = 'INFO:INFO'
 loggerFormat = 'standard_format'
 logFormatDict = {
     'standard_format': '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]' \

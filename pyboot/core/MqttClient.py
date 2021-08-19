@@ -11,6 +11,8 @@
 import random
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.packettypes import PacketTypes
+
+from pyboot.logger import log
 from pyboot.utils.error.Errors import UnknownArgNum, SystemUnknownError
 
 
@@ -28,24 +30,24 @@ class MqttClient:
 
     def connect_mqtt(self, topic, qos):
         def on_log(client, userdata, level, buf):
-            print("log: " + buf)
+            log.debug(buf)
 
         def on_connect_subscribe(client, userdata, flags, rc):
-            print("flags: ", flags)
+            # print("flags: ", flags)
             if rc == 0:
-                print("Connected to MQTT Broker!")
+                log.debug("Connected to MQTT Broker!")
                 client.subscribe(topic, qos)
             else:
-                print("Failed to connect, return code %d\n", rc)
+                log.error(f"Failed to connect, return code {rc}")
 
         def on_connect_publish(client, userdata, flags, rc):
             if rc == 0:
-                print("Connected to MQTT Broker!")
+                log.debug("Connected to MQTT Broker!")
             else:
-                print("Failed to connect, return code % d\n", rc)
+                log.error(f"Failed to connect, return code {rc}")
 
         def on_disconnect(client, userdata, flags, rc=0):
-            print("Disconnected result code " + str(rc))
+            log.error(f"Disconnected result code:{str(rc)}")
 
         # def on_message(client, userdata, msg):
         #     print(f"Received {msg.payload.decode('utf-8')} from {msg.topic} topic")
@@ -71,7 +73,7 @@ class MqttClient:
         try:
             self.client.loop_forever()
         except Exception as e:
-            print(f"loop_forever error:{e}")
+            log.error(f"loop_forever error:{e}")
 
     def run_publish(self, message):
         # client = self.connect_mqtt(self.topic)
@@ -82,10 +84,10 @@ class MqttClient:
             # result: [0, 1]
             status = result[0]
             if status == 0:
-                print(f"Send {message} to topic {self.topic}")
+                log.debug(f"Send {message} to topic {self.topic}")
                 break
             else:
-                print(f"Failed to send message to topic {self.topic}")
+                log.error(f"Failed to send message to topic {self.topic}")
                 raise SystemUnknownError(f"publish the mqtt broker failed!{self.topic}")
 
     # def publish(self, client, msg):

@@ -26,9 +26,9 @@ class MqttProcessor:
         self.edges = edges
 
     def process_maker(self, edge: EdgeModelConfig, sub_process_name: str, queue: Queue):
-        print('%s [%s] is running, parent id is [%s]' % (os.getpid(), sub_process_name, os.getppid()))
+        log.info('%s [%s] is running, parent id is [%s]' % (os.getpid(), sub_process_name, os.getppid()))
         edge_model_conf = edge
-        print(f'edge_model_conf:{edge_model_conf}')
+        # print(f'edge_model_conf:{edge_model_conf}')
         edge_model_pkg_name, edge_model_func_name = edge_model_conf.edge_mode_package()
 
         try:
@@ -44,15 +44,15 @@ class MqttProcessor:
                 if main_msg is None:
                     break
                 elif type(main_msg) == dict and "qsize" in main_msg:
-                    print("msg:", main_msg)
+                    log.info("msg:", main_msg)
                     res_qsize_msg = mqtt_threader.query_queue_size()
                     queue.put(res_qsize_msg, block=SUB_PROCESS_BLOCK, timeout=SUB_PROCESS_TIMEOUT)
                 else:
-                    print(main_msg)
+                    log.info(main_msg)
         except Exception as e:
             log.error(f"make and run the mqtt threader is failed.{e}")
             pass
-        print("---------------------- process_maker ---------------------------------")
+        # print("---------------------- process_maker ---------------------------------")
 
     def process(self):
         if self.edges is None:
@@ -66,7 +66,7 @@ class MqttProcessor:
         #         self.process_maker(edge_model_conf, i,)
         # print("---------------------- 单进程测试使用 ---------------------------------")
 
-        print('主', os.getpid(), os.getppid())
+        # print('主', os.getpid(), os.getppid())
 
         for edge in self.edges:
             edge_model_conf = edge
