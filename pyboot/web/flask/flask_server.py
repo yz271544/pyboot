@@ -35,7 +35,7 @@ class FlaskStarter(BaseStarter):
     def Start(self, starter_context):
         log.info("FlaskStarter Start start")
         app = WebApp()
-        app.run(host='0.0.0.0', port=SERV_PORT, debug=True, threaded=True)
+        app.run(host='0.0.0.0', port=SERV_PORT, debug=False, threaded=False)
         log.info("FlaskStarter Start end")
         return
 
