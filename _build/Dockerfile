@@ -2,7 +2,7 @@
 FROM python:3.6-slim
 
 COPY ./_build/requirements.txt /home
-RUN pip install -r /home/requirements.txt
+RUN pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ENV PYTHONPATH "/home/work"
 
