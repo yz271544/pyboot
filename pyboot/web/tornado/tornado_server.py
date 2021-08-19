@@ -19,6 +19,8 @@ from pyboot.web import WebApp
 import tornado.web
 import tornado.ioloop
 import tornado.httpserver
+
+from pyboot.web.tornado.EdgeSubProcessQueue import EdgeSubProcessQueue
 from pyboot.web.tornado.TornadoRoute import IndexHandler
 from pyboot.conf.settings import SERV_PORT
 
@@ -72,9 +74,10 @@ class TornadoServer(BaseStarter):
 
     def buildRoute(self):
         routes = []
-        routes.append(
-            (r'/', IndexHandler)
-        )
+        routes = routes + [
+            (r'/', IndexHandler),
+            (r'/queue_size_metrics', EdgeSubProcessQueue),
+        ]
         return routes
 
     def sig_handler(self, sig, frame):

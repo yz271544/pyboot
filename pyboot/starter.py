@@ -63,7 +63,6 @@ class StarterRegister:
 
         return StarterRegister._instance
 
-
     # 返回所有的启动器
     def AllStarters(self) -> []:
         global nonBlockingStarters

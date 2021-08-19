@@ -26,8 +26,10 @@ MAX_EDGE_NUM = 10
 
 class MqttThreader:
 
-    def __init__(self, pre_broker: str, pre_port: int, pre_topic: str, pre_qos: int, post_broker: str, post_port: int,
+    def __init__(self, sub_process_name: str, pre_broker: str, pre_port: int, pre_topic: str, pre_qos: int,
+                 post_broker: str, post_port: int,
                  post_topic: str, post_qos: int, edge_model_pkg_name, edge_model_func_name):
+        self.sub_process_name = sub_process_name
         self.pre_queue = Queue(maxsize=MAX_QUEUE)
         self.pre_broker = pre_broker
         self.pre_port = pre_port
@@ -96,15 +98,14 @@ class MqttThreader:
                 log.debug(f"publish mqtt failed:{e}")
                 pass
 
-    def edge_model_calc(self, i):
-        print(f"edge_model_calc:{i}")
+    def edge_model_calc(self):
         while True:
             in_data = None
             out_data = None
             try:
                 in_data = self.pre_queue.get(block=True, timeout=TIME_OUT)
             except Exception as e:
-                log.debug(f"get msg from pre_queue Exception:{i} - {e}, queue:{self.pre_queue.qsize()}")
+                log.debug(f"get msg from pre_queue Exception:{e}, queue:{self.pre_queue.qsize()}")
 
             if in_data is not None:
                 out_data = self.edge_model_func(in_data)
@@ -113,21 +114,34 @@ class MqttThreader:
                 try:
                     self.post_queue.put(out_data, block=True, timeout=TIME_OUT)
                 except Exception as e:
-                    log.debug(f"put msg to the post_queue Exception:{i} - {e}, queue:{self.post_queue.qsize()}")
+                    log.debug(f"put msg to the post_queue Exception:{e}, queue:{self.post_queue.qsize()}")
 
     def make_run_thead(self):
-        reading_thread = threading.Thread(target=self.pre_threader, args=(self.pre_queue,))
+        reading_thread_name = f"{self.sub_process_name}_read_mqtt"
+        reading_thread = threading.Thread(target=self.pre_threader, args=(self.pre_queue,), name=reading_thread_name)
         reading_thread.daemon = True
-        writing_thread = threading.Thread(target=self.post_threader)
+        writing_thread_name = f"{self.sub_process_name}_write_mqtt"
+        writing_thread = threading.Thread(target=self.post_threader, name=writing_thread_name)
         writing_thread.daemon = True
-        edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(0,))
-        edge_model_thread.daemon = True
+
+        # 单进程测试使用
+        # edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(0,))
+        # edge_model_thread.daemon = True
+
         reading_thread.start()
         writing_thread.start()
-        edge_model_thread.start()
-        # for i in range(MAX_EDGE_NUM):
-        #     edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(i,))
-        #     edge_model_thread.daemon = True
-        #     edge_model_thread.start()
 
+        # 单进程测试使用
+        # edge_model_thread.start()
 
+        # 子进程无阻塞,将部分线程运行在子进程的主线程中
+        # self.edge_model_calc(0)
+
+        for i in range(MAX_EDGE_NUM):
+            edge_model_thread_name = f"{self.sub_process_name}_edge_model_{i}"
+            edge_model_thread = threading.Thread(target=self.edge_model_calc, name=edge_model_thread_name)
+            edge_model_thread.daemon = True
+            edge_model_thread.start()
+
+    def query_queue_size(self):
+        return {"sub_process_name": self.sub_process_name, "pre_queue": self.pre_queue.qsize(), "post_queue": self.post_queue.qsize()}

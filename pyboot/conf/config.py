@@ -13,6 +13,7 @@ import marshmallow_objects as marshmallow
 
 
 class EdgeModelConfig(marshmallow.Model):
+    name = marshmallow.fields.Str()
     instance = marshmallow.fields.Int()
     pre_broker = marshmallow.fields.Str()
     pre_port = marshmallow.fields.Int()

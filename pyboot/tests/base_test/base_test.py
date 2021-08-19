@@ -35,3 +35,10 @@ def test_for_range():
     for i in range(sa):
         print("i ---> ", i)
 
+@pytest.mark.base
+def test_type_dict():
+    dd = {"dic": "m"}
+    print(type(dd))
+    print(type(dd) == dict)
+    print("dic" in dd)
+
