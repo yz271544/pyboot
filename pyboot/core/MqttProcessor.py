@@ -9,6 +9,7 @@
 @ref: @blog:
 """
 import os
+import time
 from multiprocessing import Process, Queue
 
 from pyboot.conf.config import EdgeModelConfig
@@ -42,6 +43,7 @@ class MqttProcessor:
             while True:
                 main_msg = queue.get(block=SUB_PROCESS_BLOCK, timeout=SUB_PROCESS_TIMEOUT)
                 if main_msg is None:
+                    mqtt_threader.join_thread_from_box()
                     break
                 elif type(main_msg) == dict and "qsize" in main_msg:
                     log.info("msg:", main_msg)
@@ -82,16 +84,16 @@ class MqttProcessor:
         # print("---------------------- 多进程测试使用 ---------------------------------")
 
     @classmethod
-    def query_queue_size(self):
+    def query_queue_size(cls):
         queue_size = []
         query_queue_size_msg = {"qsize": 0}
-        for q in self.q_list:
+        for q in cls.q_list:
             try:
                 q.put(query_queue_size_msg, block=True, timeout=2)
             except Exception as e:
                 log.error(f"send query qsize failed:{e}")
 
-        for q in self.q_list:
+        for q in cls.q_list:
             try:
                 res_queue_size_msg = q.get(block=True, timeout=2)
                 queue_size.append(res_queue_size_msg)
@@ -99,3 +101,16 @@ class MqttProcessor:
                 log.error(f"get qsize response failed:{e}")
 
         return queue_size
+
+    @classmethod
+    def teardown(cls):
+        log.info("try send close msg to the subprocess")
+        for q in cls.q_list:
+            try:
+                q.put(None, block=True, timeout=2)
+                time.sleep(1)
+            except Exception as e:
+                log.error(f"send teardown msg failed:{e}")
+        log.info("try join the subprocess")
+        for p in cls.p_list:
+            p.join()

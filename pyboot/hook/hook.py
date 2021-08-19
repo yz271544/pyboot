@@ -25,18 +25,29 @@ class HookStarter(BaseStarter):
             fn(starter_context)
 
     def Init(self, starter_context: StarterContext):
+        log.info("HookStarter Init Begin")
         for starter in GetStarters():
             log.debug("starter name:%s", starter.__class__.__name__)
             self.callbacks.append(starter.Stop)
+
+        log.info(f"HookStarter callback length:{len(self.callbacks)}")
+
+        log.info("HookStarter Init End")
         return
 
     def Setup(self, starter_context: StarterContext):
-        signal.signal(signal.SIGINT, lambda: self.sig_handler(starter_context))
-        signal.signal(signal.SIGTERM, lambda: self.sig_handler(starter_context))
+        log.info("HookStarter Setup Begin")
+        signal.signal(signal.SIGINT, lambda x, y: self.sig_handler(starter_context))
+        signal.signal(signal.SIGTERM, lambda x, y: self.sig_handler(starter_context))
+        log.info("HookStarter Setup End")
         return
 
     def Start(self, starter_context: StarterContext):
+        log.info("HookStarter Start Begin")
+        log.info("HookStarter Start End")
         return
 
     def Stop(self, starter_context: StarterContext):
+        log.info("HookStarter Stop Begin")
+        log.info("HookStarter Stop End")
         return

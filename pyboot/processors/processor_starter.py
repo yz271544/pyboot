@@ -46,6 +46,7 @@ class ProcessorStarter(BaseStarter):
 
     def Stop(self, starter_context):
         log.info("ProcessorStarter Stop Begin...")
+        self.processor.teardown()
         log.info("ProcessorStarter Stop END...")
 
 

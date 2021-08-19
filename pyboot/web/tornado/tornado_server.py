@@ -30,7 +30,6 @@ MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 3
 class TornadoServer(BaseStarter):
 
     httpServer = None
-    thread = None
 
     def Init(self, starter_context: StarterContext):
         log.info("TornadoServer Init start")
@@ -43,11 +42,11 @@ class TornadoServer(BaseStarter):
         return
 
     def Start(self, starter_context: StarterContext):
-        wApp = WebApp()
+        app = WebApp()
         # wApp.listen(SERV_PORT)
         # tornado.ioloop.IOLoop.instance().start()
         global httpServer
-        httpServer = tornado.httpserver.HTTPServer(wApp, xheaders=True)
+        httpServer = tornado.httpserver.HTTPServer(app, xheaders=True)
         httpServer.listen(SERV_PORT)
 
         signal.signal(signal.SIGINT, self.sig_handler)

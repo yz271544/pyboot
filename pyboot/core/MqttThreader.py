@@ -43,6 +43,7 @@ class MqttThreader:
         self.edge_model_pkg_name = edge_model_pkg_name
         self.edge_model_func_name = edge_model_func_name
         self.edge_model_func = self.load_edge_model(self.edge_model_pkg_name, self.edge_model_func_name)
+        self.thread_box = []
 
     def load_edge_model(self, pkgName, funcName):
         module = importlib.import_module(pkgName)
@@ -120,10 +121,12 @@ class MqttThreader:
         reading_thread_name = f"{self.sub_process_name}_read_mqtt"
         reading_thread = threading.Thread(target=self.pre_threader, args=(self.pre_queue,), name=reading_thread_name)
         reading_thread.daemon = True
+        self.thread_box.append(reading_thread)
+
         writing_thread_name = f"{self.sub_process_name}_write_mqtt"
         writing_thread = threading.Thread(target=self.post_threader, name=writing_thread_name)
         writing_thread.daemon = True
-
+        self.thread_box.append(writing_thread)
         # 单进程测试使用
         # edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(0,))
         # edge_model_thread.daemon = True
@@ -141,7 +144,12 @@ class MqttThreader:
             edge_model_thread_name = f"{self.sub_process_name}_edge_model_{i}"
             edge_model_thread = threading.Thread(target=self.edge_model_calc, name=edge_model_thread_name)
             edge_model_thread.daemon = True
+            self.thread_box.append(edge_model_thread)
             edge_model_thread.start()
 
     def query_queue_size(self):
         return {"sub_process_name": self.sub_process_name, "pre_queue": self.pre_queue.qsize(), "post_queue": self.post_queue.qsize()}
+
+    def join_thread_from_box(self):
+        for t in self.thread_box:
+            t.join()
