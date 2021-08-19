@@ -54,6 +54,7 @@ class TornadoServer(BaseStarter):
         print("tornado Stop begin")
         self.sig_handler()
         print("tornado Stop end")
+        time.sleep(MAX_WAIT_SECONDS_BEFORE_SHUTDOWN)
         sys.exit(0)
 
     def StartBlocking(self) -> bool:
