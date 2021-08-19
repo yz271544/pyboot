@@ -1,0 +1,21 @@
+GET http://localhost:5888/queue_size_metrics
+Accept: application/json
+
+### response
+HTTP/1.1 200 OK
+Server: TornadoServer/6.1
+Content-Type: application/json; charset=UTF-8
+Date: Thu, 19 Aug 2021 05:12:04 GMT
+Etag: "1bfbaf2591fe3cc4a98cbbe895e18cfeb430da63"
+Content-Length: 113
+
+{
+  "queue_size_metrics": [
+    {
+      "sub_process_name": "sub_process_telm_temperature_0",
+      "pre_queue": 1,
+      "post_queue": 8
+    }
+  ]
+}
+###
