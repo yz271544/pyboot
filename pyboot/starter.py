@@ -9,10 +9,8 @@
 @ref: @blog:
 """
 import sys
-# import functools
+import functools
 import threading
-# from pyboot.core.core import Singleton
-# from starter_context import StarterContext
 
 SystemGroup = 30
 BasicResourcesGroup = 20
@@ -80,27 +78,23 @@ class StarterRegister:
             nonBlockingStarters.append(starter)
 
 
-# StarterRegister = StarterRegister()
-# Starters = [Starter]
-
-
 # 注册starter
 def Register(starter: Starter):
     StarterRegister().Register(starter)
 
 
-#排序starter
-# def SortStarters():
-#     def cmp(a, b):
-#         # 这个函数按照类Intervals的属性end降序排序
-#         if a.PriorityGroup() > b.PriorityGroup():
-#             return -1
-#         if a.Priority() > b.Priority():
-#             return 1
-#         return 0
-#
-#     starters = sorted(Starters, key=functools.cmp_to_key(cmp))
-#     return starters
+# 排序starter
+def SortStarters():
+    def cmp(a, b):
+        # 这个函数按照类Intervals的属性end降序排序
+        if a.PriorityGroup() > b.PriorityGroup():
+            return -1
+        if a.Priority() > b.Priority():
+            return 1
+        return 0
+
+    starters = sorted(GetStarters(), key=functools.cmp_to_key(cmp))
+    return starters
 
 
 # 获取所有注册的starter
