@@ -77,6 +77,7 @@ You can adjust the number of service instances or edge model threads to improve 
 However, post_queue generally writes messages to mqtt , When the pressure is high, 
 there may still be some instantaneous backlogs;
 
+![performance](images/performance-check-block.png)
 
 ## docker
 Provides a Makefile file, which can be used to easily generate docker images through the make images command. 
