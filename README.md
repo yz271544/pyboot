@@ -1,13 +1,64 @@
-# Start run
+# pyboot
+
+The original purpose of this project was to call scientific computing models on the edge for edge computing scenarios.
+
+## Architecture
+
+![arch](images/edge-model-arch.png)
+
+![htop](images/htop-subprocess-thread.png)
+
+## Features
+
+
+## Design
+### 1. starter
+The system components can be expanded through the implementation of Starter. 
+At present, the system provides several components for configuration, multi-process processing, and webserver. 
+Finally, the system interrupts and stop signals are uniformly accepted to call the Stop function of `HookStarter` 
+to recover all resources and stop the service.
+
+1. `BaseConfStarter`:
+   Provide the relevant parameters of a unified custom configuration for the entire system. 
+   The relevant configuration information can be expanded by modifying the `config.yaml` and `config.py` files, 
+   and the system built-in parameters are provided by the `settings.py` file;
+2. `ProcessorStarter`:
+   Provides multi-process and multi-threaded call functions for edge model calls. 
+   The default overall call logic of an edge model will be extended to an independent sub-process, 
+   and for a model call, its data transmission and reception and model call, 
+   then Use more in the multithreading of this child process;
+3. `TornadoServer` or `FlaskStarter`:
+   Provides a unified web service for the main process, 
+   currently provides two optional frameworks based on `Flask` and `Tornado`;
+4. `HookStarter`:
+   The `Stop` functions of all integrated components are registered and managed uniformly, 
+   and the resources can be recycled in order by priority, and finally the operation of the entire service is stopped;
+### 2. boot
+The boot program that the system starts, loads each Starter configured in brun/__init__.py, 
+and executes the Init, Setup, and Start functions of all Starter components in turn when boot.Starter() is called. 
+The penultimate Starter should be It is a component with blocking function (such as FlaskStarter, TornadoStarter), 
+the last one should be HookStarter;
+
+## Configuration
+
+
+## Start run
 
 ```shell
+pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
 export PYTHONPATH=$PYTHONPATH:`pwd`:'pwd'/pyboot
 
 python pyboot/brun/main.py
 ```
 
+## docker
+Provides a Makefile file, which can be used to easily generate docker images through the make images command. 
+Currently, python:3.6-slim is used as the basic image;
 
-## test
-```shell
-./benthos -c ../conf/benthos/http_mqtt_for_pyboot.yaml
-```
+## TODO
+
+- [x] Persistence framework integration
+- [x] Integration testing for some edge models
+- [x] Integrate with kubernetes and kubeedge, and write related yaml resource files;
+- [ ] ...

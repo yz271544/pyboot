@@ -41,8 +41,9 @@ class MqttProcessor:
                                          edge_model_pkg_name, edge_model_func_name)
             mqtt_threader.make_run_thead()
             while True:
-                main_msg = queue.get(block=SUB_PROCESS_BLOCK, timeout=SUB_PROCESS_TIMEOUT)
+                main_msg = queue.get(block=SUB_PROCESS_BLOCK, timeout=None)
                 if main_msg is None:
+                    log.info("get msg None")
                     mqtt_threader.join_thread_from_box()
                     break
                 elif type(main_msg) == dict and "qsize" in main_msg:
@@ -54,7 +55,7 @@ class MqttProcessor:
         except Exception as e:
             log.error(f"make and run the mqtt threader is failed.{e}")
             pass
-        # print("---------------------- process_maker ---------------------------------")
+        print("---------------------- process_maker ---------------------------------")
 
     def process(self):
         if self.edges is None:
