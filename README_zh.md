@@ -11,9 +11,6 @@
 ![htop](images/htop-subprocess-thread.png)
 
 ## Features
-
-
-## Design
 ### 1. starter
 系统组件可以通过 Starter 的实现进行扩展。
 目前，系统提供了几个组件用于配置、多进程处理和webserver，
@@ -33,7 +30,6 @@
 系统启动的引导程序, 将配置在brun/__init__.py中的各个Starter进行加载,并在boot.Starter()调用时,
 依次执行所有Starter组件的Init, Setup, Start函数, 倒数第二个Starter应该是具有阻塞功能的组件(例如FlaskStarter, TornadoStarter), 
 最后一个应该是HookStarter;
-
 
 ## Configuration
 ```yaml
@@ -59,9 +55,7 @@ edge:
 
 ```
 
-
 ## Start run
-
 ```shell
 pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
@@ -70,6 +64,10 @@ export PYTHONPATH=$PYTHONPATH:`pwd`:'pwd'/pyboot
 python pyboot/brun/main.py
 ```
 
+## check the performance
+您可以向 `http://localhost:5888/queue_size_metrics` 发送 get 请求。
+以获取服务消息处理的性能是否有阻塞, 如果 pre_queue 和 post_queue的值大于0,则说明当前服务存在性能积压.
+可以调整增加服务实例或边缘模型线程数以提高效率,然而post_queue一般是向mqtt写消息,压力较大时可能依然会出现部分的瞬时积压;
 
 ## docker
 提供了Makefile文件, 可以通过make images命令方便的进行docker镜像的生成,目前采用python:3.6-slim作为基础镜像;

@@ -11,9 +11,6 @@ The original purpose of this project was to call scientific computing models on 
 ![htop](images/htop-subprocess-thread.png)
 
 ## Features
-
-
-## Design
 ### 1. starter
 The system components can be expanded through the implementation of Starter. 
 At present, the system provides several components for configuration, multi-process processing, and webserver. 
@@ -64,9 +61,7 @@ edge:
 
 
 ```
-
 ## Start run
-
 ```shell
 pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
@@ -74,6 +69,14 @@ export PYTHONPATH=$PYTHONPATH:`pwd`:'pwd'/pyboot
 
 python pyboot/brun/main.py
 ```
+## check the performance
+You can send get request to the `http://localhost:5888/queue_size_metrics`.
+To obtain whether the performance of service message processing is blocked, 
+if the value of pre_queue and post_queue is greater than 0, it means that the current service has a performance backlog. 
+You can adjust the number of service instances or edge model threads to improve efficiency. 
+However, post_queue generally writes messages to mqtt , When the pressure is high, 
+there may still be some instantaneous backlogs;
+
 
 ## docker
 Provides a Makefile file, which can be used to easily generate docker images through the make images command. 
