@@ -1,6 +1,9 @@
 # pyboot
 
+[英文](README.md) | 中文
+
 该项目的初衷是为边缘计算场景调用边缘科学计算模型。
+
 ## Architecture
 
 ![arch](images/edge-model-arch.png)
@@ -33,6 +36,28 @@
 
 
 ## Configuration
+```yaml
+---
+app_name: pyboot
+description: pyboot for edge calc
+edge:
+  - name: telm_temperature # subscirbe_name: sub_process_{name}_{instance}
+    instance: 1
+    # input data from mqtt broker
+    pre_broker: 192.168.241.1
+    pre_port: 1883
+    pre_topic: /gridsum/test/telm/in/m1
+    pre_qos: 0
+    # edge model config path: {package_full_name}.{py_module_file_name}.{func_name}
+    edge_mode: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
+    # input data from mqtt broker
+    post_broker: 192.168.241.1
+    post_port: 1883
+    post_topic: /gridsum/test/telm/out/m1
+    post_qos: 0
+
+
+```
 
 
 ## Start run
