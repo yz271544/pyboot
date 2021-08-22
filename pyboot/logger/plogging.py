@@ -7,7 +7,6 @@
 @desc
 """
 from datetime import datetime
-
 '''Implements a simple log library.
 
 This module is a simple encapsulation of logging module to provide a more
@@ -67,6 +66,8 @@ import logging.handlers
 from pythonjsonlogger import jsonlogger
 from enum import Enum
 
+log_props = None
+
 # Color escape string
 COLOR_RED = '\033[1;31m'
 COLOR_GREEN = '\033[1;32m'
@@ -107,6 +108,7 @@ supported_keys = [
     'thread',
     'threadName'
 ]
+
 
 class FormatType(Enum):
     # 为序列值指定value值
@@ -175,7 +177,10 @@ class GridsumJsonFormatter(jsonlogger.JsonFormatter):
         else:
             log_record['level'] = record.levelname
         if not log_record.get('production'):
-            log_record['production'] = 'pyboot'
+            if log_props is not None:
+                log_record['production'] = log_props.app_name
+            else:
+                log_record['production'] = 'boot'
         if log_record.get('level') in ['ERROR', 'WARNING', 'CRITICAL']:
             log_record['error_type'] = 'gridsum_error_type'
             log_record['error_msg'] = 'error_msg'
@@ -222,6 +227,16 @@ class Plog:
         self.g_logger.addHandler(handler)
 
         return handler
+
+    @classmethod
+    def update_log_props(cls, props):
+        """
+        Add a configured handler to the global logger.
+        :param props:
+        :return:
+        """
+        global log_props
+        log_props = props
 
     def add_streamhandler(self, level, fmt, format_type):
         """

@@ -55,7 +55,7 @@ class MqttProcessor:
         except Exception as e:
             log.error(f"make and run the mqtt threader is failed.{e}")
             pass
-        print("---------------------- process_maker ---------------------------------")
+        print(f"---------------------- {sub_process_name} is over ---------------------------------")
 
     def process(self):
         if self.edges is None:
