@@ -15,13 +15,14 @@ from queue import Queue
 
 from paho.mqtt.packettypes import PacketTypes
 
+from pyboot.conf.settings import MAX_QUEUE, TIME_OUT, MAX_EDGE_NUM
 from pyboot.core.MqttClient import MqttClient
 from pyboot.logger import log
 from pyboot.utils.error.Errors import UnknownArgNum
 
-MAX_QUEUE = 1000
-TIME_OUT = 120
-MAX_EDGE_NUM = 10
+# MAX_QUEUE = 1000
+# TIME_OUT = 120
+# MAX_EDGE_NUM = 10
 
 
 class MqttThreader:

@@ -6,6 +6,7 @@
 @time Created on 2018/11/13 14:20
 @desc
 """
+from datetime import datetime
 
 '''Implements a simple log library.
 
@@ -63,6 +64,8 @@ import os
 import sys
 import logging
 import logging.handlers
+from pythonjsonlogger import jsonlogger
+from enum import Enum
 
 # Color escape string
 COLOR_RED = '\033[1;31m'
@@ -85,11 +88,48 @@ LOG_COLORS = {
     'EXCEPTION': COLOR_RED + '%s' + COLOR_RESET,
 }
 
+supported_keys = [
+    'asctime',
+    'created',
+    'filename',
+    'funcName',
+    'levelname',
+    'levelno',
+    'lineno',
+    'module',
+    'msecs',
+    'message',
+    'name',
+    'pathname',
+    'process',
+    'processName',
+    'relativeCreated',
+    'thread',
+    'threadName'
+]
+
+class FormatType(Enum):
+    # 为序列值指定value值
+    color = 1
+    json = 2
+    file = 3
+
+
+class FormatKey:
+    log_format = lambda x: ['%({0:s})s'.format(i) for i in x]
+    standard_format = '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]' \
+                      '[%(levelname)s][%(message)s]',  # 其中name为getlogger指定的名字
+    simple_format = '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
+    id_simple_format = '[%(levelname)s][%(asctime)s] %(message)s'
+    simple_format_info = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    supported_format = ' '.join(log_format(supported_keys))
+
 
 class ColoredFormatter(logging.Formatter):
     """
     A colorful formatter.
     """
+
     def __init__(self, fmt=None, datefmt=None):
         logging.Formatter.__init__(self, fmt, datefmt)
 
@@ -109,6 +149,39 @@ class ColoredFormatter(logging.Formatter):
         return LOG_COLORS.get(level_name, '%s') % msg
 
 
+class CustomJsonFormatter(jsonlogger.JsonFormatter):
+    def add_fields(self, log_record, record, message_dict):
+        super(CustomJsonFormatter, self).add_fields(log_record, record, message_dict)
+        if not log_record.get('timestamp'):
+            # this doesn't use record.created, so it is slightly off
+            now = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+            log_record['timestamp'] = now
+        if log_record.get('level'):
+            log_record['level'] = log_record['level'].upper()
+        else:
+            log_record['level'] = record.levelname
+
+
+class GridsumJsonFormatter(jsonlogger.JsonFormatter):
+
+    def add_fields(self, log_record, record, message_dict):
+        super(GridsumJsonFormatter, self).add_fields(log_record, record, message_dict)
+        if not log_record.get('timestamp'):
+            # this doesn't use record.created, so it is slightly off
+            now = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+            log_record['timestamp'] = now
+        if log_record.get('level'):
+            log_record['level'] = log_record['level'].upper()
+        else:
+            log_record['level'] = record.levelname
+        if not log_record.get('production'):
+            log_record['production'] = 'pyboot'
+        if log_record.get('level') in ['ERROR', 'WARNING', 'CRITICAL']:
+            log_record['error_type'] = 'gridsum_error_type'
+            log_record['error_msg'] = 'error_msg'
+            log_record['error_stacktrace'] = 'error_stacktrace'
+
+
 class Plog:
 
     def __init__(self):
@@ -117,13 +190,13 @@ class Plog:
     def get_logger_instance(self):
         return self.g_logger
 
-    def add_handler(self, cls, level, fmt, colorful, **kwargs):
+    def add_handler(self, cls, level, fmt, format_type, **kwargs):
         """
         Add a configured handler to the global logger.
         :param cls:
         :param level:
         :param fmt:
-        :param colorful:
+        :param format_type:
         :param kwargs:
         :return:
         """
@@ -135,8 +208,13 @@ class Plog:
         handler = cls(**kwargs)
         handler.setLevel(level)
 
-        if colorful:
+        if format_type == FormatType.color:
             formatter = ColoredFormatter(fmt)
+        elif format_type == FormatType.json:
+            # formatter = jsonlogger.JsonFormatter()
+            # formatter = CustomJsonFormatter('%(timestamp)s %(level)s %(name)s %(message)s')
+            # formatter = jsonlogger.JsonFormatter(format_keys())
+            formatter = GridsumJsonFormatter(fmt)
         else:
             formatter = logging.Formatter(fmt)
 
@@ -145,14 +223,15 @@ class Plog:
 
         return handler
 
-    def add_streamhandler(self, level, fmt, isColor):
+    def add_streamhandler(self, level, fmt, format_type):
         """
         Add a stream handler to the global logger.
         :param level:
         :param fmt:
+        :param format_type
         :return:
         """
-        return self.add_handler(logging.StreamHandler, level, fmt, isColor)
+        return self.add_handler(logging.StreamHandler, level, fmt, format_type)
 
     def add_filehandler(self, level, fmt, filename, mode, backup_count, limit, when):
         """
@@ -207,8 +286,8 @@ class Plog:
         self.g_logger.setLevel(logging.DEBUG)
 
     def set_logger(self, filename=None, mode='a', level='ERROR:DEBUG',
-                   fmt='[%(levelname)s] %(asctime)s %(message)s',
-                   backup_count=5, limit=20480, when=None):
+                   fmt='simple_format',
+                   backup_count=5, limit=20480, when=None, format_type=FormatType.color):
         """
         Configure the global logger.
         :param filename:
@@ -218,6 +297,7 @@ class Plog:
         :param backup_count:
         :param limit:
         :param when:
+        :param format_type
         :return:
         """
         level = level.split(':')
@@ -229,13 +309,12 @@ class Plog:
             f_level = level[1]  # FileHandler log level
 
         self.init_logger()
-        self.add_streamhandler(s_level, fmt, False)
+        self.add_streamhandler(s_level, fmt, format_type)
         if filename is not None:
             self.add_filehandler(f_level, fmt, filename, mode, backup_count, limit, when)
 
         # Import the common log functions for convenient
         self.import_log_funcs()
-
 
     def import_log_funcs(self):
         """
@@ -250,6 +329,7 @@ class Plog:
         for func_name in log_funcs:
             func = getattr(self.g_logger, func_name)
             setattr(curr_mod, func_name, func)
+
 
 
 # Set a default logger

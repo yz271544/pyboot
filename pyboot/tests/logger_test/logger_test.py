@@ -11,6 +11,8 @@
 import pytest
 import logging
 
+from pyboot.logger.plogging import FormatKey
+
 
 @pytest.mark.base
 def test_logger_level():
@@ -18,3 +20,9 @@ def test_logger_level():
     print(level)
     assert 20 == level
 
+
+@pytest.mark.base
+def test_log_format():
+    # fmt = FormatKey.log_format(FormatKey.supported_keys)
+    print(FormatKey.simple_format_info)
+    print(FormatKey.supported_format)
