@@ -7,6 +7,9 @@
 @desc
 """
 from datetime import datetime
+
+from pyboot.conf import BaseConfig
+
 '''Implements a simple log library.
 
 This module is a simple encapsulation of logging module to provide a more
