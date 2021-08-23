@@ -9,3 +9,6 @@ IMAGE_TAG ?= $(shell git describe --tags)
 images:
 	docker build -t hulyndon/pyboot:${IMAGE_TAG} -f _build/Dockerfile .
 
+.PHONY: image-on-tensorflow
+image-on-tensorflow:
+	docker build -t hulyndon/pyboot-tensorflow:${IMAGE_TAG} -f _build/tensorflow.Dockerfile .
