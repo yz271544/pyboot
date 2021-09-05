@@ -2,7 +2,7 @@ attrdict==2.0.1
 attrs==21.2.0
 cffi==1.14.6
 click==7.1.2
-dataclasses==0.8
+dataclasses<=0.8
 DBUtils==2.0.2
 Flask==1.1.4
 importlib-metadata==4.6.3
