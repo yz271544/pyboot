@@ -8,7 +8,7 @@
 
 ![arch](images/edge-model-arch.png)
 
-![htop](images/htop-subprocess-thread.png)
+![htop](images/pyboot-tensorflow.png)
 
 ## Features
 ### 1. starter
