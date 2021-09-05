@@ -71,6 +71,71 @@ python pyboot/brun/main.py
 
 ![performance](images/performance-check-block.png)
 
+## test
+1. 本地安装docker环境, 下载数据生成器镜像:
+```shell
+export GOFAKE_IMAGE_TAG=v6.5.0-7-g4224d58
+# 拉取镜像
+docker pull docker.gridsumdissector.com/kubeedge/gofakeit-server@${GOFAKE_IMAGE_TAG}
+# 运行
+docker run -itd -p 18080:8080 --restart always --name gofaker docker.gridsumdissector.com/kubeedge/gofakeit-server:${GOFAKE_IMAGE_TAG}
+
+```
+
+2. 本地安装mqtt中间件mosquitto
+```shell
+yum install mosquitto -y
+```
+
+3. 下载消息转接程序
+```shell
+# 下载消息转接程序
+mkdir $HOME/benthos/bin -p
+cd $HOME/benthos/bin
+curl --noproxy "*" -X GET -u 域账号:域账号密码 -O http://repository.gridsum.com/repository/cps/pkg/tools/benthos/x86_64/v3.49.0-3-g84709014/linux/amd64/bin/benthos
+chmod +x benthos
+
+# 下载转接程序配置文件
+mkdir $HOME/benthos/conf -p
+cd $HOME/benthos/conf
+## 测试模型1 - 纯python函数
+curl --noproxy "*" -X GET -u 域账号:域账号密码 -O http://repository.gridsum.com/repository/cps/pkg/tools/benthos/x86_64/v3.49.0-3-g84709014/linux/amd64/conf/http_mqtt_for_pyboot.yaml
+## 测试模型2 - 加载pickle模型文件
+curl --noproxy "*" -X GET -u 域账号:域账号密码 -O http://repository.gridsum.com/repository/cps/pkg/tools/benthos/x86_64/v3.49.0-3-g84709014/linux/amd64/conf/http_json_mqtt_for_pyboot.yaml
+
+```
+4. 启动消息转接程序
+```shell
+cd $HOME/benthos/bin
+## 运行转接模型1需要的数据到本地mosquitto: topic=/gridsum/test/telm/in/m1
+./benthos -c ../conf/http_mqtt_for_pyboot.yaml
+## 运行转接模型2需要的数据到本地mosquitto: topic=/gridsum/test/telm/in/m_test
+./benthos -c ../conf/http_json_mqtt_for_pyboot.yaml
+```
+5. 启动后可通过mqttbox观察数据格式
+- 模型1 转接数据
+![模型1转接数据](images/1.http_mqtt_for_pyboot.png)
+- 模型2 转接数据
+![模型2转接数据](images/2.http_json_mqtt_for_pyboot.png)
+
+6. 此刻可以去pyboot工程中,启动`brun/main.py`来测试模型了
+- 模型1 运行结果
+![模型1运行结果](images/out/m1_out.png)
+- 模型2 运行结果
+![模型2运行结果](images/out/m2_out.png)
+
+7. 可调节配置文件中单位时间内的qos参数, 进行性能测试
+```yaml
+rate_limit_resources:
+  - label: foobar
+    local:
+      count: 1
+      interval: 6s
+```
+- 通过接口查看数据处理的积压情况, 帮助了解模型性能:
+![模型运行性能](images/out/queue_size_metrics.png)
+
+
 ## docker
 提供了Makefile文件, 可以通过make images命令方便的进行docker镜像的生成,目前采用python:3.6-slim作为基础镜像;
 

@@ -13,4 +13,14 @@ edge:
     post_port: 1883
     post_topic: /gridsum/test/telm/out/m1
     post_qos: 0
-
+  - name: dict_test
+    instance: 1
+    pre_broker: 192.168.241.1
+    pre_port: 1883
+    pre_topic: /gridsum/test/telm/in/m_test
+    pre_qos: 0
+    edge_mode: pyboot.modules.gridsum.science.test.index.test_from_dict
+    post_broker: 192.168.241.1
+    post_port: 1883
+    post_topic: /gridsum/test/telm/out/m_test
+    post_qos: 0
