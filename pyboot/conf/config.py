@@ -82,7 +82,7 @@ class BaseConfig(json.JSONEncoder):
 
 class MqttSchema(marshmallow.Schema):
     name = marshmallow.fields.Str()
-    brokers = marshmallow.fields.Str()
+    broker = marshmallow.fields.Str()
     qos = marshmallow.fields.Int()
     retain = marshmallow.fields.Bool()
 
@@ -91,8 +91,8 @@ class MqttSchema(marshmallow.Schema):
         return MqttSchema(**data)
 
     def __repr__(self):
-        return "%s(name=%r, brokers=%r, retain=%r)" % (
-            self.__class__.name, self.name, self.brokers, json.dumps(self.retain))
+        return "%s(name=%r, broker=%r, retain=%r)" % (
+            self.__class__.name, self.name, self.broker, json.dumps(self.retain))
 
 
 class RuleSubSchema(marshmallow.Schema):

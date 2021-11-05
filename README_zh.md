@@ -33,14 +33,14 @@
 
 ## Configuration
 ```yaml
-# mqtt brokers resources configuration
+# mqtt broker resources configuration
 mqtts:
   - name: b1
-    brokers: tcp://192.168.241.1:1883
+    broker: tcp://192.168.241.1:1883
     qos: 0
     retain: false
   - name: b2
-    brokers: tcp://192.168.241.1:1883
+    broker: tcp://192.168.241.1:1883
     qos: 0
     retain: false
 # rules configuration
