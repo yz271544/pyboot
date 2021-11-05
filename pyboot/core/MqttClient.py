@@ -18,7 +18,8 @@ from pyboot.utils.error.Errors import UnknownArgNum, SystemUnknownError
 
 class MqttClient:
 
-    def __init__(self, protocol: str, host: str, port: int, topic: str, qos: int, packet_type: PacketTypes, on_message=None):
+    def __init__(self, protocol: str, host: str, port: int, topic: str, qos: int,
+                 packet_type: PacketTypes, on_message=None):
         self.protocol = protocol
         self.host = host
         self.port = port

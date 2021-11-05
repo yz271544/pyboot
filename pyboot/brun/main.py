@@ -8,6 +8,8 @@
 @env: Python @desc:
 @ref: @blog:
 """
+
+from pyboot.brun import starterRegister
 from pyboot.boot import BootApplication
 from pyboot.conf import get_base_conf
 from pyboot.logger import log

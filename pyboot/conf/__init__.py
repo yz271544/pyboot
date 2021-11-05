@@ -55,7 +55,7 @@ def get_base_conf() -> BaseConfig:
     mqtt_dict = get_mqtt_conf()
     rules = get_rule_conf()
 
-    edges = [EdgeModelConfig]
+    edges = []
     for rule in rules:
         sub_info = rule['sub']
         sub_name = sub_info['name']
@@ -77,7 +77,7 @@ def get_base_conf() -> BaseConfig:
                                             edge_mode=rule['func'],
                                             post_broker_protocol=pub_protocol,
                                             post_broker_host=pub_host,
-                                            post_broker_port=pub_port,
+                                            post_broker_port=int(pub_port),
                                             post_qos=int(mqtt_pub_info['qos']),
                                             post_retain=mqtt_pub_info['retain'],
                                             post_topic=pub_info['topic'],
