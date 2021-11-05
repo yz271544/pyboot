@@ -41,25 +41,45 @@ the last one should be HookStarter;
 ## Configuration
 ```yaml
 ---
-app_name: pyboot
-description: pyboot for edge calc
-edge:
-  - name: telm_temperature # subscirbe_name: sub_process_{name}_{instance}
-    instance: 1
+# mqtt brokers resources configuration
+mqtts:
+  - name: b1
+    brokers: tcp://192.168.241.1:1883
+    qos: 0
+    retain: false
+  - name: b2
+    brokers: tcp://192.168.241.1:1883
+    qos: 0
+    retain: false
+# rules configuration
+rules:
+  # subprocess 1
+  - name: telm_temperature  # subscirbe_name: sub_process_{name}_{instance}
     # input data from mqtt broker
-    pre_broker: 192.168.241.1
-    pre_port: 1883
-    pre_topic: /gridsum/test/telm/in/m1
-    pre_qos: 0
+    sub:
+      name: b1
+      clientId: 111
+      topic: /gridsum/test/telm/in/m1
+    # output data from mqtt broker
+    pub:
+      name: b1
+      clientId: 222
+      timeout: 10s
+      topic: /gridsum/test/telm/out/m1
     # edge model config path: {package_full_name}.{py_module_file_name}.{func_name}
-    edge_mode: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
-    # input data from mqtt broker
-    post_broker: 192.168.241.1
-    post_port: 1883
-    post_topic: /gridsum/test/telm/out/m1
-    post_qos: 0
-
-
+    func: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
+  # subprocess 2
+  - name: dict_test
+    sub:
+      name: b1
+      clientId: 3333
+      topic: /gridsum/test/telm/in/m_test
+    pub:
+      name: b1
+      clientId: 4444
+      timeout: 10s
+      topic: /gridsum/test/telm/out/m_test
+    func: pyboot.modules.gridsum.science.test.index.test_from_dict
 ```
 ## Start run
 ```shell
