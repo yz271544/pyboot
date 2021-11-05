@@ -10,44 +10,86 @@
 """
 import os
 import yaml
-from pyboot.conf.config import BaseConfig
+from pyboot.conf.config import BaseConfig, MqttSchema, RuleSchema, EdgeModelConfig, parse_host
 
 from pyboot.conf.settings import PYBOOT_HOME
+from pyboot.utils.common.SnowflakeId import IdWorker
 
-# print("PWD:", os.getcwd())
-conf = os.path.join(PYBOOT_HOME, "conf/config.yaml")
-df = open(conf, 'r')
-config = yaml.load(df.read(), Loader=yaml.FullLoader)
-# print(config)
-baseConfig = BaseConfig(**config)
-# print("baseConfig:", baseConfig)
-# print(baseConfig.name)
-# print(baseConfig.description)
-# print(baseConfig.env)
-# print(baseConfig.advise_ip)
+global_mqtt_dict = {}
+global_rules = []
+id_worker = IdWorker.get_instance()
 
 
-def getBaseConf() -> BaseConfig:
-    return baseConfig
+def load_from_config():
+    new_conf = os.path.join(PYBOOT_HOME, "conf/config.yaml")
+    with open(new_conf, 'r') as cf:
+        cnf = yaml.load(cf.read(), Loader=yaml.FullLoader)
+        mqtt_schema = MqttSchema(many=True)
+        rule_schema = RuleSchema(many=True)
+        mqtts = mqtt_schema.dump(cnf['mqtts'])
+        for mqtt in mqtts:
+            global_mqtt_dict[mqtt['name']] = mqtt
 
-# arrConfList = [BaseConfig]
-# for content in config:
-#     arrConf = BaseConfig(**content)
-#     print(content)
-#     print(isinstance(content, dict))
-#     arrConfList.append(arrConf)
-# df.close()
-# print("arrConfList:")
-# pprint(arrConfList)
-# print(arrConfList[1].name)
-# print(arrConfList[1].description)
-# print("arrConf.env:", arrConfList[1].env)
-# print(arrConfList[1].advise_ip)
-#
-# print()
-# for e in arrConfList[1].env:
-#     print(e)
-#
+        rules = rule_schema.dump(cnf['rules'])
+        for rule in rules:
+            global_rules.append(rule)
 
-# def getBaseConf() -> [BaseConfig]:
-#     return arrConfList
+
+def get_mqtt_conf() -> dict:
+    """
+    parse the mqtts dict from config file
+    :return:
+    """
+    return global_mqtt_dict
+
+
+def get_rule_conf() -> [RuleSchema]:
+    """
+    parse and get the rules from config file
+    :return:
+    """
+    return global_rules
+
+
+def get_base_conf() -> BaseConfig:
+    mqtt_dict = get_mqtt_conf()
+    rules = get_rule_conf()
+
+    edges = [EdgeModelConfig]
+    for rule in rules:
+        sub_info = rule['sub']
+        sub_name = sub_info['name']
+        mqtt_sub_info = mqtt_dict[sub_name]
+        (sub_protocol, sub_host, sub_port) = parse_host(mqtt_sub_info['brokers'])
+
+        pub_info = rule['pub']
+        pub_name = pub_info['name']
+        mqtt_pub_info = mqtt_dict[pub_name]
+        (pub_protocol, pub_host, pub_port) = parse_host(mqtt_pub_info['brokers'])
+
+        edge_model_config = EdgeModelConfig(rule['name'],
+                                            pre_broker_protocol=sub_protocol,
+                                            pre_broker_host=sub_host,
+                                            pre_broker_port=int(sub_port),
+                                            pre_qos=int(mqtt_sub_info['qos']),
+                                            pre_retain=mqtt_sub_info['retain'],
+                                            pre_topic=sub_info['topic'],
+                                            edge_mode=rule['func'],
+                                            post_broker_protocol=pub_protocol,
+                                            post_broker_host=pub_host,
+                                            post_broker_port=pub_port,
+                                            post_qos=int(mqtt_pub_info['qos']),
+                                            post_retain=mqtt_pub_info['retain'],
+                                            post_topic=pub_info['topic'],
+                                            )
+        edges.append(edge_model_config)
+
+    return BaseConfig("test", "test", edges)
+
+
+def get_id_worker() -> IdWorker:
+    return id_worker
+
+
+if not bool(global_mqtt_dict) and not bool(global_rules):
+    load_from_config()

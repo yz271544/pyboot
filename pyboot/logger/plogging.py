@@ -7,6 +7,9 @@
 @desc
 """
 from datetime import datetime
+
+from pyboot.conf import get_id_worker
+
 '''Implements a simple log library.
 
 This module is a simple encapsulation of logging module to provide a more
@@ -109,6 +112,8 @@ supported_keys = [
     'threadName'
 ]
 
+app_default_name = get_id_worker().get_id()
+
 
 class FormatType(Enum):
     # 为序列值指定value值
@@ -167,6 +172,7 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
 class GridsumJsonFormatter(jsonlogger.JsonFormatter):
 
     def add_fields(self, log_record, record, message_dict):
+
         super(GridsumJsonFormatter, self).add_fields(log_record, record, message_dict)
         if not log_record.get('timestamp'):
             # this doesn't use record.created, so it is slightly off
@@ -176,11 +182,13 @@ class GridsumJsonFormatter(jsonlogger.JsonFormatter):
             log_record['level'] = log_record['level'].upper()
         else:
             log_record['level'] = record.levelname
+
         if not log_record.get('production'):
-            if log_props is not None:
-                log_record['production'] = log_props.app_name
+            app_name = os.getenv("APP_INSTANCE_NAME")
+            if app_name is not None:
+                log_record['production'] = app_name
             else:
-                log_record['production'] = 'boot'
+                log_record['production'] = f'pyboot-{app_default_name}'
         if log_record.get('level') in ['ERROR', 'WARNING', 'CRITICAL']:
             log_record['error_type'] = 'gridsum_error_type'
             log_record['error_msg'] = 'error_msg'
@@ -344,8 +352,6 @@ class Plog:
         for func_name in log_funcs:
             func = getattr(self.g_logger, func_name)
             setattr(curr_mod, func_name, func)
-
-
 
 # Set a default logger
 # set_logger()

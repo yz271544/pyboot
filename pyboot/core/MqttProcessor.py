@@ -34,10 +34,16 @@ class MqttProcessor:
 
         try:
             mqtt_threader = MqttThreader(sub_process_name,
-                                         edge_model_conf.pre_broker, edge_model_conf.pre_port,
-                                         edge_model_conf.pre_topic, edge_model_conf.pre_qos,
-                                         edge_model_conf.post_broker, edge_model_conf.post_port,
-                                         edge_model_conf.post_topic, edge_model_conf.post_qos,
+                                         edge_model_conf.pre_broker_protocol,
+                                         edge_model_conf.pre_broker_host,
+                                         edge_model_conf.pre_broker_port,
+                                         edge_model_conf.pre_topic,
+                                         edge_model_conf.pre_qos,
+                                         edge_model_conf.post_broker_protocol,
+                                         edge_model_conf.post_broker_host,
+                                         edge_model_conf.post_broker_port,
+                                         edge_model_conf.post_topic,
+                                         edge_model_conf.post_qos,
                                          edge_model_pkg_name, edge_model_func_name)
             mqtt_threader.make_run_thead()
             while True:

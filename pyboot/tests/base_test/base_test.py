@@ -10,6 +10,9 @@
 """
 import pytest
 
+test_dict = {}
+test_list = []
+
 
 class BaseClazz(object):
 
@@ -35,10 +38,43 @@ def test_for_range():
     for i in range(sa):
         print("i ---> ", i)
 
+
 @pytest.mark.base
 def test_type_dict():
     dd = {"dic": "m"}
     print(type(dd))
     print(type(dd) == dict)
     print("dic" in dd)
+
+
+"""
+pytest -s -m "base" pyboot/tests/base_test/base_test.py::test_type_collect_init
+"""
+@pytest.mark.base
+def test_type_collect_init():
+    if not bool(test_dict):
+        print("test_dict is None")
+        test_dict['a'] = 1
+    else:
+        print("test_dict is not None")
+        print(test_dict)
+
+    if not bool(test_dict):
+        print("test_dict is None")
+    else:
+        print("test_dict is not None")
+        print(test_dict)
+
+    if not bool(test_list):
+        print("test_dict is None")
+        test_list.append(1)
+    else:
+        print("test_list is not None")
+        print(test_list)
+
+    if not bool(test_list):
+        print("test_list is None")
+    else:
+        print("test_list is not None")
+        print(test_list)
 

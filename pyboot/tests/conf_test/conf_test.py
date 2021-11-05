@@ -14,7 +14,7 @@ import pyboot.conf as pybootconf
 
 @pytest.mark.base
 def test_load_from_yaml():
-    baseConf = pybootconf.getBaseConf()
+    baseConf = pybootconf.get_base_conf()
     edge1 = baseConf.edge[0]
     packName, funcName = edge1.edge_mode_package()
     print("PackageName:", packName)

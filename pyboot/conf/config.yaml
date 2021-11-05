@@ -1,26 +1,32 @@
----
-app_name: pyboot
-description: pyboot for edge calc
-edge:
+mqtts:
+  - name: b1
+    brokers: tcp://192.168.241.1:1883
+    qos: 0
+    retain: false
+  - name: b2
+    brokers: tcp://192.168.241.1:1883
+    qos: 0
+    retain: false
+rules:
   - name: telm_temperature
-    instance: 1
-    pre_broker: 192.168.241.1
-    pre_port: 1883
-    pre_topic: /gridsum/test/telm/in/m1
-    pre_qos: 0
-    edge_mode: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
-    post_broker: 192.168.241.1
-    post_port: 1883
-    post_topic: /gridsum/test/telm/out/m1
-    post_qos: 0
+    sub:
+      name: b1
+      clientId: 111
+      topic: /gridsum/test/telm/in/m1
+    pub:
+      name: b1
+      clientId: 222
+      timeout: 10s
+      topic: /gridsum/test/telm/out/m1
+    func: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
   - name: dict_test
-    instance: 1
-    pre_broker: 192.168.241.1
-    pre_port: 1883
-    pre_topic: /gridsum/test/telm/in/m_test
-    pre_qos: 0
-    edge_mode: pyboot.modules.gridsum.science.test.index.test_from_dict
-    post_broker: 192.168.241.1
-    post_port: 1883
-    post_topic: /gridsum/test/telm/out/m_test
-    post_qos: 0
+    sub:
+      name: b1
+      clientId: 3333
+      topic: /gridsum/test/telm/in/m_test
+    pub:
+      name: b1
+      clientId: 4444
+      timeout: 10s
+      topic: /gridsum/test/telm/out/m_test
+    func: pyboot.modules.gridsum.science.test.index.test_from_dict

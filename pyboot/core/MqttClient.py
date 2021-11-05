@@ -18,8 +18,9 @@ from pyboot.utils.error.Errors import UnknownArgNum, SystemUnknownError
 
 class MqttClient:
 
-    def __init__(self, broker: str, port: int, topic: str, qos: int, packet_type: PacketTypes, on_message=None):
-        self.broker = broker
+    def __init__(self, protocol: str, host: str, port: int, topic: str, qos: int, packet_type: PacketTypes, on_message=None):
+        self.protocol = protocol
+        self.host = host
         self.port = port
         self.topic = topic
         self.qos = qos
@@ -53,7 +54,7 @@ class MqttClient:
         #     print(f"Received {msg.payload.decode('utf-8')} from {msg.topic} topic")
 
         # Set Connecting Client ID
-        client = mqtt_client.Client(self.client_id)
+        client = mqtt_client.Client(self.client_id, transport=self.protocol)
         if self.packet_type == PacketTypes.SUBSCRIBE:
             client.on_connect = on_connect_subscribe
         elif self.packet_type == PacketTypes.PUBLISH:
@@ -64,7 +65,7 @@ class MqttClient:
         if self.on_message is not None:
             client.on_message = self.on_message
         client.on_log = on_log
-        client.connect(self.broker, self.port)
+        client.connect(self.host, self.port)
         # client.loop_start()
         return client
 

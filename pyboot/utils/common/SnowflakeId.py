@@ -10,7 +10,7 @@
 @ref:
 @blog:
 """
-
+import threading
 import time
 
 # 64位ID的划分
@@ -39,6 +39,7 @@ class InvalidSystemClock(Exception):
 
 
 class IdWorker(object):
+    _instance_lock = threading.Lock()
     """
     用于生成IDs
     """
@@ -64,6 +65,15 @@ class IdWorker(object):
         self.datacenter_id = datacenter_id
         self.sequence = sequence
         self.last_timestamp = -1  # 上次计算的时间戳
+
+    @classmethod
+    def get_instance(cls, *args, **kwargs):
+        if not hasattr(IdWorker, '_instance'):
+            with IdWorker._instance_lock:
+                if not hasattr(IdWorker, '_instance'):
+                    IdWorker._instance = IdWorker(*args, **kwargs)
+
+        return IdWorker._instance
 
     def _gen_timestamp(self):
         """
@@ -110,5 +120,17 @@ class IdWorker(object):
 
 
 if __name__ == '__main__':
+
     worker = IdWorker()
     print(worker.get_id())
+
+    def task(arg):
+        obj = IdWorker.get_instance(arg)
+        print(obj)
+
+    for i in range(10):
+        t = threading.Thread(target=task, args=[i, ])
+        t.start()
+
+    obj = IdWorker.get_instance()
+    print(obj)

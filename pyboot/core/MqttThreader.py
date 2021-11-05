@@ -27,17 +27,29 @@ from pyboot.utils.error.Errors import UnknownArgNum
 
 class MqttThreader:
 
-    def __init__(self, sub_process_name: str, pre_broker: str, pre_port: int, pre_topic: str, pre_qos: int,
-                 post_broker: str, post_port: int,
-                 post_topic: str, post_qos: int, edge_model_pkg_name, edge_model_func_name):
+    def __init__(self, sub_process_name: str,
+                 pre_broker_protocol: str,
+                 pre_broker_host: str,
+                 pre_port: int,
+                 pre_topic: str,
+                 pre_qos: int,
+                 post_broker_protocol: str,
+                 post_broker_host: str,
+                 post_port: int,
+                 post_topic: str,
+                 post_qos: int,
+                 edge_model_pkg_name,
+                 edge_model_func_name):
         self.sub_process_name = sub_process_name
         self.pre_queue = Queue(maxsize=MAX_QUEUE)
-        self.pre_broker = pre_broker
+        self.pre_broker_protocol = pre_broker_protocol
+        self.pre_broker_host = pre_broker_host
         self.pre_port = pre_port
         self.pre_topic = pre_topic
         self.pre_qos = pre_qos
         self.post_queue = Queue(maxsize=MAX_QUEUE)
-        self.post_broker = post_broker
+        self.post_broker_protocol = post_broker_protocol
+        self.post_broker_host = post_broker_host
         self.post_port = post_port
         self.post_topic = post_topic
         self.post_qos = post_qos
@@ -62,7 +74,12 @@ class MqttThreader:
             except Exception as e:
                 log.debug(f"put msg to the pre_queue Exception:{e}, queue:{pre_queue.qsize()}")
 
-        mqtt_client = MqttClient(self.pre_broker, self.pre_port, self.pre_topic, self.pre_qos, PacketTypes.SUBSCRIBE,
+        mqtt_client = MqttClient(self.pre_broker_protocol,
+                                 self.pre_broker_host,
+                                 self.pre_port,
+                                 self.pre_topic,
+                                 self.pre_qos,
+                                 PacketTypes.SUBSCRIBE,
                                  on_message=pre_on_message)
         try:
             mqtt_client.run_consumer()
@@ -81,7 +98,11 @@ class MqttThreader:
                 pass
 
     def post_threader(self):
-        mqtt_client = MqttClient(self.post_broker, self.post_port, self.post_topic, self.post_qos,
+        mqtt_client = MqttClient(self.post_broker_protocol,
+                                 self.post_broker_host,
+                                 self.post_port,
+                                 self.post_topic,
+                                 self.post_qos,
                                  PacketTypes.PUBLISH)
         while True:
             data = None
@@ -149,7 +170,10 @@ class MqttThreader:
             edge_model_thread.start()
 
     def query_queue_size(self):
-        return {"sub_process_name": self.sub_process_name, "pre_queue": self.pre_queue.qsize(), "post_queue": self.post_queue.qsize()}
+        return {"sub_process_name": self.sub_process_name,
+                "pre_queue": self.pre_queue.qsize(),
+                "post_queue": self.post_queue.qsize()
+                }
 
     def join_thread_from_box(self):
         for t in self.thread_box:
