@@ -184,7 +184,7 @@ class GridsumJsonFormatter(jsonlogger.JsonFormatter):
             log_record['level'] = record.levelname
 
         if not log_record.get('production'):
-            app_name = os.getenv("APP_INSTANCE_NAME")
+            app_name = os.getenv("MY_POD_NAME")
             if app_name is not None:
                 log_record['production'] = app_name
             else:
