@@ -10,6 +10,8 @@
 """
 import os
 import yaml
+import sys
+from optparse import OptionParser, OptionGroup
 from pyboot.conf.config import BaseConfig, MqttSchema, RuleSchema, EdgeModelConfig, parse_host
 
 from pyboot.conf.settings import PYBOOT_HOME
@@ -20,9 +22,26 @@ global_rules = []
 id_worker = IdWorker.get_instance()
 
 
-def load_from_config():
-    new_conf = os.path.join(PYBOOT_HOME, "conf/config.yaml")
-    with open(new_conf, 'r') as cf:
+def get_option_parser():
+    usage = "usage: %prog [options]"
+    parser = OptionParser(usage=usage)
+
+    option_group = OptionGroup(parser, "set the prog config file for pyboot.")
+    option_group.add_option("-c", "--config", metavar="<goboot.yaml path>",
+                            dest="config",
+                            action="store",
+                            default="",
+                            type="string",
+                            help="set the prog config file.")
+    parser.add_option_group(option_group)
+    return parser
+
+
+def load_from_config(option):
+    config_file_path = option.config
+    if config_file_path == "":
+        config_file_path = os.path.join(PYBOOT_HOME, "conf/config.yaml")
+    with open(config_file_path, 'r') as cf:
         cnf = yaml.load(cf.read(), Loader=yaml.FullLoader)
         mqtt_schema = MqttSchema(many=True)
         rule_schema = RuleSchema(many=True)
@@ -91,5 +110,8 @@ def get_id_worker() -> IdWorker:
     return id_worker
 
 
+# args = ["--config", "/etc/pyboot/config.yaml", "abc", "123"]
+parser = get_option_parser()
+options, args = parser.parse_args(sys.argv[1:])
 if not bool(global_mqtt_dict) and not bool(global_rules):
-    load_from_config()
+    load_from_config(options)
