@@ -1,0 +1,48 @@
+mqtts:
+  - name: b1
+    broker: tcp://192.168.241.1:1883
+    qos: 0
+    retain: false
+  - name: b2
+    broker: tcp://192.168.241.1:1883
+    qos: 0
+    retain: false
+rules:
+  - name: thend_threshold
+    sub:
+      name: b1
+      clientId: 5555
+      topic: /gridsum/test/telm/in/thend_threshold_test
+    pub:
+      name: b1
+      clientId: 6666
+      timeout: 10s
+      topic: /gridsum/test/telm/out/thend_threshold_test
+    func: pyboot.modules.gridsum.science.trend_threshold.index.handler
+  - name: multivar
+    sub:
+      name: b1
+      clientId: 7777
+      topic: /gridsum/test/telm/in/thend_multivar_test
+    pub:
+      name: b1
+      clientId: 8888
+      timeout: 10s
+      topic: /gridsum/test/telm/out/thend_multivar_test
+    func: pyboot.modules.gridsum.science.multivar.index.handler
+func:
+  - name: http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip
+    type: multivar
+    pointName: 设备2---OPC温度
+  - name: http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip
+    type: multivar
+    pointName: 设备2---OPC湿度
+  - name: http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip
+    type: multivar
+    pointName: 设备2---OPC电量
+  - name: http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip
+    type: thend_threshold
+    deviceName: bbb2
+  - name: http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip
+    type: custom_high_level
+    deviceName: bbbbc3

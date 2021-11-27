@@ -59,6 +59,16 @@ except Exception as e:
     # print("settings sys.path:", sys.path)
     # PYBOOT_HOME = os.getcwd()
 
+MODEL_RECORD = os.path.join(PYBOOT_HOME, "conf/model_record.txt")
+MODEL_PATH = os.path.join(PYBOOT_HOME, "modules/gridsum/science")
+MODEL_REF_PREFIX = "pyboot/modules/gridsum/science"
+CHECK_SIZE = 2048
+
+try:
+    DOWNLOAD_MODEL = bool(os.environ["DOWNLOAD_MODEL"])
+except Exception as e:
+    DOWNLOAD_MODEL = False
+
 sys.path.append(os.path.dirname(os.getcwd()))
 
 try:

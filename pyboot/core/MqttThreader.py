@@ -9,13 +9,15 @@
 @ref: @blog:
 """
 import importlib
+import os
 import threading
 import json
 from queue import Queue
 
 from paho.mqtt.packettypes import PacketTypes
 
-from pyboot.conf.settings import MAX_QUEUE, TIME_OUT, MAX_EDGE_NUM
+from pyboot.conf import EdgeFuncConfig
+from pyboot.conf.settings import MAX_QUEUE, TIME_OUT, MAX_EDGE_NUM, MODEL_REF_PREFIX, PYBOOT_HOME
 from pyboot.core.MqttClient import MqttClient
 from pyboot.logger import log
 from pyboot.utils.error.Errors import UnknownArgNum
@@ -23,6 +25,23 @@ from pyboot.utils.error.Errors import UnknownArgNum
 # MAX_QUEUE = 1000
 # TIME_OUT = 120
 # MAX_EDGE_NUM = 10
+
+
+def edge_model_handle(model_name, in_data_dict):
+    pkg_path = os.path.join(MODEL_REF_PREFIX, "%s/index" % model_name)
+
+    if pkg_path[0] == os.sep:
+        pkg_path = pkg_path[1:]
+
+    print("pkg_path: %s" % pkg_path)
+    slist = str(pkg_path).split(os.sep)
+    pkg_name = '.'.join(slist)
+
+    print("pkg_name: %s" % pkg_name)
+
+    model_module = importlib.import_module(pkg_name)
+    ret = model_module.handler(in_data_dict, None)
+    return ret
 
 
 class MqttThreader:
@@ -38,8 +57,9 @@ class MqttThreader:
                  post_port: int,
                  post_topic: str,
                  post_qos: int,
-                 edge_model_pkg_name,
-                 edge_model_func_name):
+                 funcs: [EdgeFuncConfig]):
+                 # edge_model_pkg_name,
+                 # edge_model_func_name):
         self.sub_process_name = sub_process_name
         self.pre_queue = Queue(maxsize=MAX_QUEUE)
         self.pre_broker_protocol = pre_broker_protocol
@@ -53,9 +73,10 @@ class MqttThreader:
         self.post_port = post_port
         self.post_topic = post_topic
         self.post_qos = post_qos
-        self.edge_model_pkg_name = edge_model_pkg_name
-        self.edge_model_func_name = edge_model_func_name
-        self.edge_model_func = self.load_edge_model(self.edge_model_pkg_name, self.edge_model_func_name)
+        self.funcs = funcs
+        # self.edge_model_pkg_name = edge_model_pkg_name
+        # self.edge_model_func_name = edge_model_func_name
+        # self.edge_model_func = self.load_edge_model(self.edge_model_pkg_name, self.edge_model_func_name)
         self.thread_box = []
 
     def load_edge_model(self, pkgName, funcName):
@@ -131,7 +152,19 @@ class MqttThreader:
                 log.debug(f"get msg from pre_queue Exception:{e}, queue:{self.pre_queue.qsize()}")
 
             if in_data is not None:
-                out_data = self.edge_model_func(in_data)
+                to_dict = {}
+                try:
+                    to_dict = json.loads(in_data)
+                except Exception:
+                    pass
+                # out_data = self.edge_model_func(to_dict, None)
+                if self.funcs is not None and len(self.funcs) > 0:
+                    for func in self.funcs:
+                        if func.device_name == to_dict["deviceInfo"]["deviceName"]:
+                            if func.point_name in to_dict["telemetry"] or func.point_name == "":
+                                edge_model_handle(func.model_name, to_dict)
+                            else:
+                                pass
 
             if out_data is not None:
                 try:

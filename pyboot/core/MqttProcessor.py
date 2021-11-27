@@ -12,7 +12,7 @@ import os
 import time
 from multiprocessing import Process, Queue
 
-from pyboot.conf.config import EdgeModelConfig
+from pyboot.conf.config import EdgeModelConfig, EdgeFuncConfig
 from pyboot.conf.settings import SUB_PROCESS_BLOCK, SUB_PROCESS_TIMEOUT
 from pyboot.core.MqttThreader import MqttThreader
 from pyboot.logger import log
@@ -23,14 +23,15 @@ class MqttProcessor:
     q_list = []
     p_list = []
 
-    def __init__(self, edges):
+    def __init__(self, edges, funcs):
         self.edges = edges
+        self.funcs = funcs
 
-    def process_maker(self, edge: EdgeModelConfig, sub_process_name: str, queue: Queue):
+    def process_maker(self, edge: EdgeModelConfig, funcs: EdgeFuncConfig, sub_process_name: str, queue: Queue):
         log.info('%s [%s] is running, parent id is [%s]' % (os.getpid(), sub_process_name, os.getppid()))
         edge_model_conf = edge
         # print(f'edge_model_conf:{edge_model_conf}')
-        edge_model_pkg_name, edge_model_func_name = edge_model_conf.edge_mode_package()
+        # edge_model_pkg_name, edge_model_func_name = edge_model_conf.edge_mode_package()
 
         try:
             mqtt_threader = MqttThreader(sub_process_name,
@@ -44,7 +45,8 @@ class MqttProcessor:
                                          edge_model_conf.post_broker_port,
                                          edge_model_conf.post_topic,
                                          edge_model_conf.post_qos,
-                                         edge_model_pkg_name, edge_model_func_name)
+                                         funcs)
+                                         #edge_model_pkg_name, edge_model_func_name)
             mqtt_threader.make_run_thead()
             while True:
                 main_msg = queue.get(block=SUB_PROCESS_BLOCK, timeout=None)
@@ -82,7 +84,7 @@ class MqttProcessor:
             for i in range(edge_model_conf.instance):
                 q = Queue()
                 process_name = f"sub_process_{edge_model_conf.name}_{i}"
-                p = Process(target=self.process_maker, args=(edge_model_conf, process_name, q),
+                p = Process(target=self.process_maker, args=(edge_model_conf, self.funcs, process_name, q),
                             name=process_name)
                 p.daemon = True
                 self.q_list.append(q)

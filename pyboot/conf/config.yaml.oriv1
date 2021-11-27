@@ -1,0 +1,43 @@
+mqtts:
+  - name: b1
+    broker: tcp://192.168.241.1:1883
+    qos: 0
+    retain: false
+  - name: b2
+    broker: tcp://192.168.241.1:1883
+    qos: 0
+    retain: false
+rules:
+  - name: telm_temperature
+    sub:
+      name: b1
+      clientId: 111
+      topic: /gridsum/test/telm/in/m1
+    pub:
+      name: b1
+      clientId: 222
+      timeout: 10s
+      topic: /gridsum/test/telm/out/m1
+    func: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
+  - name: dict_test
+    sub:
+      name: b1
+      clientId: 3333
+      topic: /gridsum/test/telm/in/m_test
+    pub:
+      name: b1
+      clientId: 4444
+      timeout: 10s
+      topic: /gridsum/test/telm/out/m_test
+    func: pyboot.modules.gridsum.science.test.index.test_from_dict
+  - name: thend_threshold
+    sub:
+      name: b1
+      clientId: 5555
+      topic: /gridsum/test/telm/in/thend_threshold_test
+    pub:
+      name: b1
+      clientId: 6666
+      timeout: 10s
+      topic: /gridsum/test/telm/out/thend_threshold_test
+    func: pyboot.modules.gridsum.science.trend_threshold.index.handler

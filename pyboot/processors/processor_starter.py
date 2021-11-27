@@ -10,10 +10,12 @@
 """
 from pyboot.conf import BaseConfig
 from pyboot.conf.base_conf_starter import Props
+from pyboot.conf.settings import DOWNLOAD_MODEL
 from pyboot.core.MqttProcessor import MqttProcessor
 from pyboot.logger import log
 from pyboot.starter import BaseStarter
 from pyboot.starter_context import StarterContext
+from pyboot.utils.model.model import download_by_funcs
 
 
 class ProcessorStarter(BaseStarter):
@@ -24,8 +26,10 @@ class ProcessorStarter(BaseStarter):
     def Init(self, starter_context: StarterContext):
         log.info("ProcessorStarter Init start")
         props = Props()
-        # print(props.__class__.__name__) # BaseConfig
+        print(props.__class__.__name__) # BaseConfig
         self.props = props
+        if DOWNLOAD_MODEL:
+            download_by_funcs(self.props.funcs)
         log.info("初始化配置")
         log.info("ProcessorStarter Init end")
         return
@@ -33,7 +37,7 @@ class ProcessorStarter(BaseStarter):
     def Setup(self, starter_context):
         log.info("ProcessorStarter Setup Begin...")
         if self.props is not None and len(self.props.edge) > 0:
-            self.processor = MqttProcessor(self.props.edge)
+            self.processor = MqttProcessor(self.props.edge, self.props.funcs)
         log.info("ProcessorStarter Setup END...")
         return
 

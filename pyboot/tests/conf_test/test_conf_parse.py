@@ -13,10 +13,10 @@ import os
 import pytest
 import yaml
 
-from pyboot.conf import PYBOOT_HOME, get_rule_conf, get_mqtt_conf, get_base_conf
+from pyboot.conf import PYBOOT_HOME, get_mqtt_conf, get_base_conf
 
 # pytest -s -m "base" pyboot/tests/conf_test/test_conf_parse.py::test_load_from_yaml
-from pyboot.conf.config import MqttSchema, RuleSchema, EdgeModelConfig, parse_host, BaseConfig
+from pyboot.conf.config import MqttSchema, RuleSchema, parse_host
 
 
 @pytest.mark.base

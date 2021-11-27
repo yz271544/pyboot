@@ -24,7 +24,6 @@ class EdgeModelConfig(json.JSONEncoder):
         self.pre_topic = kwargs['pre_topic']
         self.pre_qos = kwargs['pre_qos']
         self.pre_retain = kwargs['pre_retain']
-        self.edge_mode = kwargs['edge_mode']
         self.post_broker_protocol = kwargs['post_broker_protocol']
         self.post_broker_host = kwargs['post_broker_host']
         self.post_broker_port = kwargs['post_broker_port']
@@ -38,36 +37,36 @@ class EdgeModelConfig(json.JSONEncoder):
 
         return json.JSONEncoder.default(self, obj)
 
-    def edge_mode_package(self):
-        """
-        :return: (packageName, funcName)
-        """
-        edgemode = self.edge_mode
-        slist = str(edgemode).split('.')
-        return '.'.join(slist[:-1]), slist[-1]
+    # def edge_mode_package(self):
+    #     """
+    #     :return: (packageName, funcName)
+    #     """
+    #     edgemode = self.edge_mode
+    #     slist = str(edgemode).split('.')
+    #     return '.'.join(slist[:-1]), slist[-1]
 
     def __repr__(self):
-        return "(name=%r, instance=%r, " \
+        return "%s(name=%r, instance=%r, " \
                "pre_broker_protocol=%r, pre_broker_host=%r, pre_broker_port=%r, " \
                "pre_topic=%r, pre_qos=%r, pre_retain=%r, " \
-               "edge_mode=%r, " \
                "post_broker_protocol=%r, post_broker_host=%r, post_broker_port=%r, " \
                "post_topic=%r, post_qos=%r, post_retain=%r)" % (
-                   self.name, self.instance,
+                   self.__class__.__name__, self.name, self.instance,
                    self.pre_broker_protocol, self.pre_broker_host, self.pre_broker_port,
                    self.pre_topic, self.pre_qos, self.pre_retain,
-                   self.edge_mode,
                    self.post_broker_protocol, self.post_broker_host, self.post_broker_port,
                    self.post_topic, self.post_qos, self.post_retain)
 
 
-class BaseConfig(json.JSONEncoder):
+class EdgeFuncConfig(json.JSONEncoder):
 
-    def __init__(self, name, description, edge: [EdgeModelConfig]):
+    def __init__(self, **kwargs):
         super().__init__()
-        self.name = name
-        self.description = description
-        self.edge = edge
+        self.model_address = kwargs['model_address'] if 'model_address' in kwargs else ""
+        self.model_md5 = kwargs['model_md5'] if 'model_md5' in kwargs else ""
+        self.model_name = kwargs['modelName'] if 'modelName' in kwargs else ""
+        self.device_name = kwargs['deviceName'] if 'deviceName' in kwargs else ""
+        self.point_name = kwargs['pointName'] if 'pointName' in kwargs else ""
 
     def default(self, obj):
         if isinstance(obj, bytes):
@@ -76,8 +75,28 @@ class BaseConfig(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
     def __repr__(self):
-        return "(name=%r, description=%r, edge=%r)" % (
-            self.name, self.description, self.edge)
+        return "%s(model_address=%r, model_md5=%r, model_name=%r, " \
+               "device_name=%r, point_name=%r)" % (
+                   self.__class__.__name__, self.model_address, self.model_md5, self.model_name,
+                   self.device_name, self.point_name)
+
+
+class BaseConfig(json.JSONEncoder):
+
+    def __init__(self, edge: [EdgeModelConfig], funcs: [EdgeFuncConfig]):
+        super().__init__()
+        self.edge = edge
+        self.funcs = funcs
+
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            return str(obj, encoding='utf-8')
+
+        return json.JSONEncoder.default(self, obj)
+
+    def __repr__(self):
+        return "%s(edge=%r, funcs=%r)" % (
+            self.__class__.__name__, json.dumps(self.funcs), json.dumps(self.edge))
 
 
 class MqttSchema(marshmallow.Schema):
@@ -128,15 +147,31 @@ class RuleSchema(marshmallow.Schema):
     name = marshmallow.fields.Str()
     sub = marshmallow.fields.Nested(RuleSubSchema)
     pub = marshmallow.fields.Nested(RulePubSchema)
-    func = marshmallow.fields.Str()
 
     @marshmallow.post_load
     def make_rule(self, data, **kwargs):
         return RuleSchema(**data)
 
     def __repr__(self):
-        return "%s(name=%r, func=%r, sub=%r, pub=%r)" % (
-            self.__class__.name, self.name, self.func, json.dumps(self.sub), json.dumps(self.pub))
+        return "%s(name=%r, sub=%r, pub=%r)" % (
+            self.__class__.__name__, self.name, json.dumps(self.sub), json.dumps(self.pub))
+
+
+class FuncSchema(marshmallow.Schema):
+    model_address = marshmallow.fields.Str()
+    model_md5 = marshmallow.fields.Str()
+    modelName = marshmallow.fields.Str()
+    pointName = marshmallow.fields.Str()
+    deviceName = marshmallow.fields.Str()
+
+    @marshmallow.post_load
+    def make_rule(self, data, **kwargs):
+        return FuncSchema(**data)
+
+    def __repr__(self):
+        return "%s(model_address=%r, model_md5=%r, modelName=%r, pointName=%r, deviceName=%r)" % (
+            self.__class__.__name__, self.model_address, self.model_md5,
+            self.modelName, self.pointName, self.deviceName)
 
 
 def parse_host(broker: str) -> (str, str, str):

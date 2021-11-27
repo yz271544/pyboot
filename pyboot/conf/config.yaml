@@ -8,25 +8,27 @@ mqtts:
     qos: 0
     retain: false
 rules:
-  - name: telm_temperature
-    sub:
+  - sub:
       name: b1
-      clientId: 111
-      topic: /gridsum/test/telm/in/m1
+      clientId: 5555
+      topic: /gridsum/test/telm/in/thend_threshold_test
     pub:
       name: b1
-      clientId: 222
+      clientId: 6666
       timeout: 10s
-      topic: /gridsum/test/telm/out/m1
-    func: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
-  - name: dict_test
-    sub:
+      topic: /gridsum/test/telm/out/thend_threshold_test
+  - sub:
       name: b1
-      clientId: 3333
-      topic: /gridsum/test/telm/in/m_test
+      clientId: 7777
+      topic: /gridsum/test/telm/in/thend_multivar_test
     pub:
       name: b1
-      clientId: 4444
+      clientId: 8888
       timeout: 10s
-      topic: /gridsum/test/telm/out/m_test
-    func: pyboot.modules.gridsum.science.test.index.test_from_dict
+      topic: /gridsum/test/telm/out/thend_multivar_test
+funcs:
+  - model_address: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
+    model_md5: pZ4DJ+YhYM9ppHD+VhLi+A==
+    modelName: thend_threshold_zd
+    deviceName: 设备3
+    pointName: OPC温度
