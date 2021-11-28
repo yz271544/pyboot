@@ -65,10 +65,11 @@ def download(http, **kwargs):
                     out.write(data)
 
             log.info("download %s, status: %r, header: %r" % (download_target_file, r.status, r.headers))
+            r.release_conn()
         except Exception as e:
             log.error(f"download model:{func.model_address} failed!")
-        finally:
-            r.release_conn()
+        # finally:
+        #     r.release_conn()
     return download_target_file
 
 
