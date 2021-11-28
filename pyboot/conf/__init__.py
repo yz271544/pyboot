@@ -52,6 +52,8 @@ def load_from_config(option=None, config_file_path=""):
         func_schema = FuncSchema(many=True)
         mqtts = mqtt_schema.dump(cnf['mqtts'])
         for mqtt in mqtts:
+            if "qos" not in mqtt:
+                mqtt["qos"] = 0
             global_mqtt_dict[mqtt['name']] = mqtt
 
         rules = rule_schema.dump(cnf['rules'])
