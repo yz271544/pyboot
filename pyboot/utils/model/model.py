@@ -34,9 +34,14 @@ def download_by_funcs(funcs: [EdgeFuncConfig]):
         else:
             download_target_file = download(http, func=func)
             uncompress_model_dir = os.path.join(MODEL_PATH, func.model_name)
-            un_zip(download_target_file, uncompress_model_dir)
-            os.remove(download_target_file)
-
+            try:
+                un_zip(download_target_file, uncompress_model_dir)
+            except Exception as e:
+                log.error(f"unzip file {download_target_file} failed: {e}")
+            try:
+                os.remove(download_target_file)
+            except Exception as e:
+                log.error(f"remove file {download_target_file} failed")
 
 def download(http, **kwargs):
     func = kwargs['func']
