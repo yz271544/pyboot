@@ -9,4 +9,4 @@ ENV PYTHONPATH "/home/work"
 WORKDIR /home/work
 COPY ./pyboot /home/work/pyboot
 
-CMD ["python", "pyboot/brun/main.py"]
+ENTRYPOINT ["python", "pyboot/brun/main.py"]
