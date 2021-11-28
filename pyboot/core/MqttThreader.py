@@ -33,14 +33,23 @@ def edge_model_handle(model_name, in_data_dict):
     if pkg_path[0] == os.sep:
         pkg_path = pkg_path[1:]
 
-    print("pkg_path: %s" % pkg_path)
+    # print("pkg_path: %s" % pkg_path)
     slist = str(pkg_path).split(os.sep)
     pkg_name = '.'.join(slist)
 
-    print("pkg_name: %s" % pkg_name)
+    # print("pkg_name: %s" % pkg_name)
 
-    model_module = importlib.import_module(pkg_name)
-    ret = model_module.handler(in_data_dict, None)
+    try:
+        model_module = importlib.import_module(pkg_name)
+        ret = model_module.handler(in_data_dict, None)
+    except ModuleNotFoundError as mnfe:
+        msg = f"No module pkg_name: {pkg_name}, {mnfe}"
+        ret = msg
+        log.error(msg)
+    except Exception as e:
+        msg = f"internal exception: {e}"
+        ret = msg
+        log.error(msg)
     return ret
 
 
@@ -162,7 +171,7 @@ class MqttThreader:
                     for func in self.funcs:
                         if func.device_name == to_dict["deviceInfo"]["deviceName"]:
                             if func.point_name in to_dict["telemetry"] or func.point_name == "":
-                                edge_model_handle(func.model_name, to_dict)
+                                out_data = edge_model_handle(func.model_name, to_dict)
                             else:
                                 pass
 

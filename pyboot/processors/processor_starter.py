@@ -28,14 +28,16 @@ class ProcessorStarter(BaseStarter):
         props = Props()
         print(props.__class__.__name__) # BaseConfig
         self.props = props
-        if DOWNLOAD_MODEL:
-            download_by_funcs(self.props.funcs)
+        # if DOWNLOAD_MODEL:
+        #     download_by_funcs(self.props.funcs)
         log.info("初始化配置")
         log.info("ProcessorStarter Init end")
         return
 
     def Setup(self, starter_context):
         log.info("ProcessorStarter Setup Begin...")
+        if DOWNLOAD_MODEL:
+            download_by_funcs(self.props.funcs)
         if self.props is not None and len(self.props.edge) > 0:
             self.processor = MqttProcessor(self.props.edge, self.props.funcs)
         log.info("ProcessorStarter Setup END...")

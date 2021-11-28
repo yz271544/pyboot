@@ -27,7 +27,7 @@ rules:
       timeout: 10s
       topic: /gridsum/test/telm/out/thend_multivar_test
 funcs:
-  - model_address: http://10.200.60.18:22122/group1/M00/00/0F/Ch1hQF-NYuyAHmhzAAHaYnbCrrs964.zip
+  - model_address: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
     model_md5: pZ4DJ+YhYM9ppHD+VhLi+A==
     modelName: thend_threshold_zd
     deviceName: 设备3
