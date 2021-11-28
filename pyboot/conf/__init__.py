@@ -54,10 +54,14 @@ def load_from_config(option=None, config_file_path=""):
         for mqtt in mqtts:
             if "qos" not in mqtt:
                 mqtt["qos"] = 0
+            if "retain" not in mqtt:
+                mqtt["retain"] = False
             global_mqtt_dict[mqtt['name']] = mqtt
 
         rules = rule_schema.dump(cnf['rules'])
         for rule in rules:
+            if "timeout" not in rule["pub"]:
+                rule["pub"]["timeout"] = "10s"
             global_rules.append(rule)
 
         funcs = func_schema.dump(cnf['funcs'])
