@@ -46,41 +46,52 @@ mqtts:
 # rules configuration
 rules:
   # subprocess 1
-  - name: telm_temperature  # subscirbe_name: sub_process_{name}_{instance}
     # input data from mqtt broker
-    sub:
+  - sub:
       name: b1
-      clientId: 111
-      topic: /gridsum/test/telm/in/m1
+      clientId: 5555
+      topic: /gridsum/test/telm/in/thend_threshold_test
     # output data from mqtt broker
     pub:
       name: b1
-      clientId: 222
+      clientId: 6666
       timeout: 10s
-      topic: /gridsum/test/telm/out/m1
-    # edge model config path: {package_full_name}.{py_module_file_name}.{func_name}
-    func: pyboot.modules.gridsum.science.industry.telemetry.telm_temperature
+      topic: /gridsum/test/telm/out/thend_threshold_test
   # subprocess 2
-  - name: dict_test
-    sub:
+  - sub:
       name: b1
-      clientId: 3333
-      topic: /gridsum/test/telm/in/m_test
+      clientId: 7777
+      topic: /gridsum/test/telm/in/thend_multivar_test
     pub:
       name: b1
-      clientId: 4444
+      clientId: 8888
       timeout: 10s
-      topic: /gridsum/test/telm/out/m_test
-    func: pyboot.modules.gridsum.science.test.index.test_from_dict
+      topic: /gridsum/test/telm/out/thend_multivar_test
+funcs:
+  - model_address: http://10.200.60.18:22122/group1/M00/00/0F/Ch1hQF-NYuyAHmhzAAHaYnbCrrs964.zip
+    model_md5: pZ4DJ+YhYM9ppHD+VhLi+A==
+    # edge model config path: pyboot/modules/gridsum/science/{modelName}
+    # edge model reference function entry name for importlib: pyboot.modules.gridsum.science.{modelName}.index.index(event, context)
+    modelName: thend_threshold_zd
+    deviceName: 设备3
+    pointName: OPC温度
+
 ```
 
 ## Start run
 ```shell
-pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install -r pyboot/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 export PYTHONPATH=$PYTHONPATH:`pwd`:'pwd'/pyboot
 
 python pyboot/brun/main.py
+
+# 如果希望自定义传入配置文件，可以传入参数，如果不传，默认会使用pyboot/conf/config.yaml的配置文件
+python pyboot/brun/main.py --config pyboot/conf/config.yaml
+
+# 如果希望程序自动下载，解压缩模型文件（目前支持.zip)，需要声明环境变量
+export DOWNLOAD_MODEL=True
+
 ```
 
 ## check the performance
