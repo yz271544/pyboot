@@ -45,8 +45,8 @@ def load_from_config(option=None, config_file_path=""):
         config_file_path = option.config
         if config_file_path == "":
             config_file_path = os.path.join(PYBOOT_HOME, "conf/config.yaml")
-    with open(config_file_path, 'r') as cf:
-        cnf = yaml.load(cf.read(), Loader=yaml.FullLoader)
+    with open(config_file_path, 'r', encoding='UTF-8') as cf:
+        cnf = yaml.load(cf.read(), Loader=yaml.FullLoader,)
         mqtt_schema = MqttSchema(many=True)
         rule_schema = RuleSchema(many=True)
         func_schema = FuncSchema(many=True)
