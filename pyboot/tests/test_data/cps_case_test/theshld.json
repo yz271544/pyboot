@@ -1,0 +1,35 @@
+{
+    "deviceInfo":{
+        "deviceName":"device1-1",
+        "edgeDeviceName":"设备three",
+        "topic":"GG2",
+        "edgeCalculation":false,
+        "encryption":false,
+        "compression":false
+    },
+    "telemetry":{
+        "ts":1585194439000,
+        "RC_cylinder1_1P_d_dispPeak":86,
+        "device2-1tag": 1234,
+        "OPC温度":10370,
+        "OPC湿度":"86",
+        "OPC电量":true
+    },
+    "model_data":{
+        "window":"short",
+        "trend_model_data":[
+            [
+                1585298907056,
+                33
+            ],
+            [
+                1585298909060,
+                33
+            ],
+            [
+                1585298909266,
+                33
+            ]
+        ]
+    }
+}
