@@ -146,7 +146,8 @@ class MqttThreader:
             try:
                 log.debug(f"post_threader put data:{data}")
                 data = json.dumps(data)
-                mqtt_client.run_publish(data)
+                if data is not None and data != "null" and data != "{}":
+                    mqtt_client.run_publish(data)
             except Exception as e:
                 log.debug(f"publish mqtt failed:{e}")
                 pass
