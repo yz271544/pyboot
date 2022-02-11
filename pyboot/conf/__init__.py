@@ -110,7 +110,7 @@ def get_base_conf() -> BaseConfig:
         mqtt_pub_info = mqtt_dict[pub_name]
         (pub_protocol, pub_host, pub_port) = parse_host(mqtt_pub_info['broker'])
 
-        edge_model_config = EdgeModelConfig(rule['sub'],
+        edge_model_config = EdgeModelConfig(name=rule['sub']['name'],
                                             pre_broker_protocol=sub_protocol,
                                             pre_broker_host=sub_host,
                                             pre_broker_port=int(sub_port),
