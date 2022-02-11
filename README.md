@@ -177,6 +177,9 @@ rate_limit_resources:
 ## docker
 Provides a Makefile file, which can be used to easily generate docker images through the make images command. 
 Currently, python:3.6-slim is used as the basic image;
+```shell
+docker run --name pyboot-local-test -itd -v /lyndon/iProject/pypath/config/goboot.yml:/etc/edge/goboot.yml -e DOWNLOAD_MODEL="True" docker.gridsumdissector.com/kubeedge/pyboot:v1.0.2 --config /etc/edge/goboot.yml
+```
 
 ## TODO
 
