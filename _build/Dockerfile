@@ -3,7 +3,7 @@ FROM python:3.6-slim
 
 COPY ./_build/requirements.txt /home
 RUN pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-RUN apt-get update && apt-get install libgomp1 telnet
+RUN apt-get update && apt-get install libgomp1 telnet dnsutils -y
 
 ENV PYTHONPATH "/home/work"
 
