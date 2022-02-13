@@ -5,7 +5,7 @@ RUN apt update \
 
 COPY ./_build/tensorflow.requirements.txt /home
 RUN pip install -r /home/tensorflow.requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-RUN apt-get update && apt-get install libgomp1 telnet
+RUN apt-get update && apt-get install libgomp1 telnet -y
 
 ENV PYTHONPATH "/home/work"
 
