@@ -47,6 +47,8 @@ MAX_QUEUE = 1000
 TIME_OUT = 120
 MAX_EDGE_NUM = 10
 
+MAX_PUBLISH_RETRY = 3
+
 try:
     PYBOOT_HOME = os.environ["PYBOOT_HOME"]
 except Exception as e:

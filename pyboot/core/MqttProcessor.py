@@ -61,7 +61,7 @@ class MqttProcessor:
                 else:
                     log.info(main_msg)
         except Exception as e:
-            log.error(f"make and run the mqtt threader is failed.{e}")
+            log.error(f"make and run the mqtt threader is failed.{e}", stack_info=True)
             pass
         print(f"---------------------- {sub_process_name} is over ---------------------------------")
 
@@ -100,14 +100,14 @@ class MqttProcessor:
             try:
                 q.put(query_queue_size_msg, block=True, timeout=2)
             except Exception as e:
-                log.error(f"send query qsize failed:{e}")
+                log.error(f"send query qsize failed:{e}", stack_info=True)
 
         for q in cls.q_list:
             try:
                 res_queue_size_msg = q.get(block=True, timeout=2)
                 queue_size.append(res_queue_size_msg)
             except Exception as e:
-                log.error(f"get qsize response failed:{e}")
+                log.error(f"get qsize response failed:{e}", stack_info=True)
 
         return queue_size
 
@@ -119,7 +119,7 @@ class MqttProcessor:
                 q.put(None, block=True, timeout=2)
                 time.sleep(1)
             except Exception as e:
-                log.error(f"send teardown msg failed:{e}")
+                log.error(f"send teardown msg failed:{e}", stack_info=True)
         log.info("try join the subprocess")
         for p in cls.p_list:
             p.join()

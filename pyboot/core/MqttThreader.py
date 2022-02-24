@@ -45,11 +45,11 @@ def edge_model_handle(model_name, in_data_dict):
     except ModuleNotFoundError as mnfe:
         msg = f"No module pkg_name: {pkg_name}, {mnfe}"
         ret = msg
-        log.error(msg)
+        log.error(msg, stack_info=True)
     except Exception as e:
         msg = f"internal exception: {e}"
         ret = msg
-        log.error(msg)
+        log.error(msg, stack_info=True)
     return ret
 
 
