@@ -98,7 +98,8 @@ class MqttClient:
                 break
             else:
                 log.error(f"Failed to send message to topic {self.topic}")
-                raise SystemUnknownError(f"publish the mqtt broker failed!{self.topic}")
+                # raise SystemUnknownError(f"publish the mqtt broker failed!{self.topic}")
+                break
 
     # def publish(self, client, msg):
     #     while True:
