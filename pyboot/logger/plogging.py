@@ -191,8 +191,12 @@ class GridsumJsonFormatter(jsonlogger.JsonFormatter):
                 log_record['production'] = f'pyboot-{app_default_name}'
         if log_record.get('level') in ['ERROR', 'WARNING', 'CRITICAL']:
             log_record['error_type'] = 'gridsum_error_type'
-            log_record['error_msg'] = 'error_msg'
-            log_record['error_stacktrace'] = 'error_stacktrace'
+            log_record['error_msg'] = record.msg
+            log_record['error_stacktrace'] = self.formatStack(record.stack_info)
+        if "stack_info" in log_record:
+            del log_record["stack_info"]
+        if "message" in log_record:
+            del log_record["message"]
 
 
 class Plog:

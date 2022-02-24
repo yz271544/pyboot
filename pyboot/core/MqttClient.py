@@ -8,6 +8,7 @@
 @env: Python @desc:
 @ref: @blog:
 """
+import time
 import random
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.packettypes import PacketTypes
@@ -66,7 +67,14 @@ class MqttClient:
         if self.on_message is not None:
             client.on_message = self.on_message
         client.on_log = on_log
-        client.connect(self.host, self.port)
+        while True:
+            try:
+                client.connect(self.host, self.port)
+                break
+            except ConnectionRefusedError as e:
+                log.error(f"connection mqtt {self.host}:{self.port} refuse error:{e}", stack_info=True)
+                time.sleep(5)
+                continue
         # client.loop_start()
         return client
 

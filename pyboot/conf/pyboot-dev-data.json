@@ -1,0 +1,32 @@
+{
+    "deviceInfo":{
+        "deviceName":"三厂-pyboot测试设备",
+        "edgeDeviceName":"设备three",
+        "topic":"GG2",
+        "edgeCalculation":false,
+        "encryption":false,
+        "compression":false
+    },
+    "telemetry":{
+        "ts":1585194439000,
+        "RC_cylinder1_1P_d_dispPeak":86,
+        "pyboot":10370
+    },
+    "model_data":{
+        "window":"short",
+        "trend_model_data":[
+            [
+                1585298907056,
+                33
+            ],
+            [
+                1585298909060,
+                33
+            ],
+            [
+                1585298909266,
+                33
+            ]
+        ]
+    }
+}

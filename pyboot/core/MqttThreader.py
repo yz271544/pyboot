@@ -135,22 +135,22 @@ class MqttThreader:
                                  self.post_qos,
                                  PacketTypes.PUBLISH)
         while True:
-            data = None
+            # data = None
             try:
                 data = self.post_queue.get(block=True, timeout=TIME_OUT)
                 log.debug(f"post_threader get data:{data}")
             except Exception as e:
                 log.debug(f"get from the pre_queue Exception:{e}, queue:{self.post_queue.qsize()}")
-                pass
+                continue
 
             try:
-                log.debug(f"post_threader put data:{data}")
-                data = json.dumps(data)
                 if data is not None and data != "null" and data != "{}":
+                    log.debug(f"post_threader put data:{data}")
+                    data = json.dumps(data)
                     mqtt_client.run_publish(data)
             except Exception as e:
                 log.debug(f"publish mqtt failed:{e}")
-                pass
+                continue
 
     def edge_model_calc(self):
         while True:
