@@ -98,8 +98,8 @@ class MqttClient:
             return
         else:
             log.error(f"Failed to send message to topic {self.topic}", stack_info=True)
-            retry += 1
-            self.run_publish(message, retry)
+            retrys += 1
+            self.run_publish(message, retrys)
 
     # def publish(self, client, msg):
     #     while True:
