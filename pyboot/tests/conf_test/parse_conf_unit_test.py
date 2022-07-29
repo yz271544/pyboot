@@ -73,9 +73,10 @@ class ParseConfUnitTest(unittest.TestCase):
             r.release_conn()
 
     def test_file_base64_md5(self):
-        target_file = "/lyndon/iProject/pypath/pyboot/pyboot/modules/gridsum/science/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip"
+        # target_file = "/lyndon/iProject/pypath/pyboot/pyboot/modules/gridsum/science/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip"
+        target_file = "/home/etl/cps/Ch1hQGGkxnSAIiFrAAO8COz2yGE652.zip"
         md5_value = GetFileMd5Byte(target_file)
-        print(md5_value)
+        print('md5_value:', md5_value)
         # base64_md5 = base64.encodebytes(md5_value)
         #
         # print(base64_md5)
@@ -84,14 +85,15 @@ class ParseConfUnitTest(unittest.TestCase):
         # sbm = str(base64_md5, encoding="utf-8")
         # sbm = ''.join(sbm[:-1].split())
         sbm = GetBase64Md5Byte(md5_value)
-        print(sbm)
+        print('sbm:', sbm)
         print(type(sbm))
 
+    #
     def test_file_base64_md5_2(self):
         target_file = "/home/etl/cps/Ch1hQGGkxnSAIiFrAAO8COz2yGE652.zip"
         md5_value = GetFileMd5Byte(target_file)
         print("md5_value:", md5_value)
         sbm = GetBase64Md5Byte(md5_value)
-        print(sbm)
+        print('sbm:', sbm)
         print(type(sbm))
 
