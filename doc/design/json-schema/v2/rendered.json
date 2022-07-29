@@ -1,0 +1,57 @@
+{
+    "funcs": [
+      {
+        "device": [
+          {
+            "deviceName": "三厂-pyboot测试设备",
+            "pointName": "pyboot"
+          }
+        ],
+        "model_address": "http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip",
+        "model_md5": "pZ4DJ+YhYM9ppHD+VhLi+A==",
+        "modelName": "TYPE_TREND_WARNING1644570851718"
+      },
+      {
+        "model_address": "bb",
+        "model_md5": "xx",
+        "modelName": "m2",
+        "device": [
+          {
+            "deviceName": "d3"
+          },
+          {
+            "deviceName": "d1"
+          }
+        ]
+      }
+    ],
+    "expose": [
+      {
+        "protocolPort": "http://:8080",
+        "name": "monitor",
+        "outPort": 38080,
+        "desc": "monitor the container"
+      }
+    ],
+    "mqtts": [
+      {
+        "retain": false,
+        "name": "mosquitto-20336454-5413-4e2f-b52e-b945291359c7",
+        "broker": "tcp://192.168.241.1:1883"
+      }
+    ],
+    "rules": [
+      {
+        "sub": {
+          "name": "mosquitto-20336454-5413-4e2f-b52e-b945291359c7",
+          "topic": "cloud/edge-data-access-a60c2306-1644570929743-e54d4620-8b1a-11ec-9969-df2a36238047",
+          "clientId": "ae03af75-13f5-4cf9-9145-0fea4e6ff1e4"
+        },
+        "pub": {
+          "name": "mosquitto-20336454-5413-4e2f-b52e-b945291359c7",
+          "topic": "cloud/edge-pyboot-e060ff31-1644570929743-e54d4620-8b1a-11ec-9969-df2a36238047",
+          "clientId": "ef2712a2-926d-4388-92d0-60470ab2613d"
+        }
+      }
+    ]
+  }

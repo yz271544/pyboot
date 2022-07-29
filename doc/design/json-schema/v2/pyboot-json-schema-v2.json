@@ -1,0 +1,164 @@
+{
+    "type": "object",
+    "properties": {
+        "mqtts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "MQTT服务名"
+                    },
+                    "broker": {
+                        "type": "string",
+                        "title": "MQTT服务地址"
+                    },
+                    "qos": {
+                        "type": "number",
+                        "title": "QoS等级",
+                        "minimum": 0,
+                        "maximum": 2
+                    },
+                    "retain": {
+                        "type": "boolean",
+                        "title": "是否开启遗嘱消息"
+                    }
+                },
+                "required": [
+                    "name",
+                    "broker",
+                    "qos",
+                    "retain"
+                ]
+            },
+            "title": "MQTT"
+        },
+        "rules": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "sub": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "title": "MQTT服务名"
+                            },
+                            "clientId": {
+                                "type": "string",
+                                "title": "MQTT客户端ID"
+                            },
+                            "topic": {
+                                "type": "string",
+                                "title": "MQTT订阅Topic"
+                            }
+                        },
+                        "title": "订阅者"
+                    },
+                    "pub": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "title": "MQTT服务名"
+                            },
+                            "clientId": {
+                                "type": "string",
+                                "title": "MQTT客户端ID"
+                            },
+                            "timeout": {
+                                "type": "number",
+                                "title": "MQTT发布超时时间"
+                            },
+                            "topic": {
+                                "type": "string",
+                                "title": "MQTT发布Topic"
+                            }
+                        },
+                        "title": "发布者"
+                    }
+                },
+                "required": [
+                    "sub",
+                    "pub"
+                ]
+            },
+            "title": "MQTT规则"
+        },
+        "funcs": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "model_address": {
+                        "type": "string",
+                        "title": "模型压缩包地址"
+                    },
+                    "model_md5": {
+                        "type": "string",
+                        "title": "模型压缩包md5"
+                    },
+                    "modelName": {
+                        "type": "string",
+                        "title": "模型名称"
+                    },
+                    "device": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "deviceName": {
+                                    "type": "string",
+                                    "title": "设备名称"
+                                },
+                                "pointName": {
+                                    "type": "string",
+                                    "title": "测点名称"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "调用模型"
+        },
+        "expose": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "暴露端口名称",
+                        "required": true
+                    },
+                    "protocolPort": {
+                        "type": "string",
+                        "title": "集群协议端口",
+                        "required": true,
+                        "enum": [
+                            "http://:8080",
+                            "tcp://:2901"
+                        ]
+                    },
+                    "outPort": {
+                        "type": "number",
+                        "title": "集群外部端口",
+                        "required": true,
+                        "description": "暴露到边缘集群外部的端口",
+                        "exclusiveMinimum": true,
+                        "exclusiveMaximum": true,
+                        "minimum": 30000,
+                        "maximum": 60000
+                    },
+                    "desc": {
+                        "type": "string",
+                        "title": "暴露端口描述"
+                    }
+                }
+            }
+        }
+    }
+}
