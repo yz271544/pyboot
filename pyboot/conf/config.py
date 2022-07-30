@@ -62,10 +62,10 @@ class EdgeFuncConfig(json.JSONEncoder):
 
     def __init__(self, **kwargs):
         super().__init__()
-        self.model_address = kwargs['model_address'] if 'model_address' in kwargs else ""
-        self.model_md5 = kwargs['model_md5'] if 'model_md5' in kwargs else ""
+        self.model_address = kwargs['modelAddress'] if 'modelAddress' in kwargs else ""
+        self.model_md5 = kwargs['modelMd5'] if 'modelMd5' in kwargs else ""
         self.model_name = kwargs['modelName'] if 'modelName' in kwargs else ""
-        self.device = kwargs['device'] if 'device' in kwargs else []
+        self.devices = kwargs['devices'] if 'devices' in kwargs else []
 
     def default(self, obj):
         if isinstance(obj, bytes):
@@ -75,8 +75,8 @@ class EdgeFuncConfig(json.JSONEncoder):
 
     def __repr__(self):
         return "%s(model_address=%r, model_md5=%r, model_name=%r, " \
-               "device=%r)" % (
-                   self.__class__.__name__, self.model_address, self.model_md5, self.model_name, self.device)
+               "devices=%r)" % (
+                   self.__class__.__name__, self.model_address, self.model_md5, self.model_name, self.devices)
 
 
 class BaseConfig(json.JSONEncoder):
@@ -155,21 +155,48 @@ class RuleSchema(marshmallow.Schema):
             self.__class__.__name__, self.name, json.dumps(self.sub), json.dumps(self.pub))
 
 
+class DeviceAttrSchema(marshmallow.Schema):
+    attrName = marshmallow.fields.Str()
+    attrValue = marshmallow.fields.Str()
+    attrExpresion = marshmallow.fields.Str()
+
+    @marshmallow.post_load
+    def make_rule(self, data, **kwargs):
+        return DeviceAttrSchema(**data)
+
+    def __repr__(self):
+        return "%s(attrName=%r, attrValue=%r, attrExpression=%r)" % (
+            self.__class__.__name__, self.attrName, self.attrValue, self.attrExpresion
+        )
+
+
+class DeviceSchema(marshmallow.Schema):
+    device = marshmallow.fields.Nested(DeviceAttrSchema, many=True)
+
+    @marshmallow.post_load
+    def make_rule(self, data, **kwargs):
+        return DeviceSchema(**data)
+
+    def __repr__(self):
+        return "%s(device=%r)" % (
+            self.__class__.__name__, self.device
+        )
+
+
 class FuncSchema(marshmallow.Schema):
-    model_address = marshmallow.fields.Str()
-    model_md5 = marshmallow.fields.Str()
+    modelAddress = marshmallow.fields.Str()
+    modelMd5 = marshmallow.fields.Str()
     modelName = marshmallow.fields.Str()
-    pointName = marshmallow.fields.Str()
-    deviceName = marshmallow.fields.Str()
+    devices = marshmallow.fields.Nested(DeviceSchema, many=True)
 
     @marshmallow.post_load
     def make_rule(self, data, **kwargs):
         return FuncSchema(**data)
 
     def __repr__(self):
-        return "%s(model_address=%r, model_md5=%r, modelName=%r, pointName=%r, deviceName=%r)" % (
-            self.__class__.__name__, self.model_address, self.model_md5,
-            self.modelName, self.pointName, self.deviceName)
+        return "%s(modelAddress=%r, modelMd5=%r, modelName=%r, devices=%r)" % (
+            self.__class__.__name__, self.modelAddress, self.modelMd5,
+            self.modelName, self.devices)
 
 
 def parse_host(broker: str) -> (str, str, str):

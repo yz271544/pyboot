@@ -23,13 +23,19 @@ class ModelRecordTest(unittest.TestCase):
     def test_add_record(self):
         # multivar_dev2_OPCtemperature###fafdafjadskfasfadfasf
         f = {
-            "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
-            "model_md5": "fafdafjadskfasfadfasf",
+            "modelAddress": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
+            "modelMd5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
-            "device": [
+            "devices": [
                 {
-                    "deviceName": "dev2",
-                    "pointName": "OPCtemperature"
+                    "attrName": "deviceName",
+                    "attrValue": "三厂-pyboot测试设备",
+                    "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
+                },
+                {
+                    "attrName": "pointName",
+                    "attrValue": "pyboot",
+                    "attrExpression": "in data_to_dict['telemetry']"
                 }
             ]
         }
