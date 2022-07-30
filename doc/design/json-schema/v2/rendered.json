@@ -12,7 +12,7 @@
       "model_address": "http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip",
       "model_md5": "pZ4DJ+YhYM9ppHD+VhLi+A==",
       "modelName": "TYPE_TREND_WARNING1644570851718",
-      "device": [
+      "devices": [
         {
           "deviceName": "三厂-pyboot测试设备",
           "pointName": "pyboot",

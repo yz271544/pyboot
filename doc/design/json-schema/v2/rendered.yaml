@@ -4,7 +4,7 @@ expose:
   outPort: 38080
   protocolPort: http://:8080
 funcs:
-- device:
+- devices:
   - deviceName: 三厂-pyboot测试设备
     deviceParseExpression: == data_to_dict['deviceInfo']['deviceName']
     pointName: pyboot

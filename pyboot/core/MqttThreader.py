@@ -176,35 +176,37 @@ class MqttThreader:
                         #         out_data = edge_model_handle(func.model_name, to_dict)
                         #     else:
                         #         pass
-                        is_device_equal = False
-                        device_expression = func.device["deviceParseExpression"]
-                        try:
-                            judge_device_express = "{} {}".format('func.device["deviceName"]', device_expression)
-                            is_device_equal = eval(judge_device_express)
-                        except SyntaxError as e:
-                            print("device parser expression syntax error" + e.msg)
-
-                        is_point_equal = False
-
-                        if "pointName" in func.device:
-                            point_expression = func.device["pointParseExpression"]
+                        for device in func.devices:
+                            is_device_equal = False
+                            device_expression = device["deviceParseExpression"]
                             try:
-                                judge_point_express = "{} {}".format('func.device["pointName"]', point_expression)
-                                is_point_equal = eval(judge_point_express)
+                                judge_device_express = "{} {}".format('func.device["deviceName"]', device_expression)
+                                is_device_equal = eval(judge_device_express)
                             except SyntaxError as e:
-                                print("point parser expression syntax error" + e.msg)
-                        else:
-                            is_point_equal = True
-                        if is_device_equal and is_point_equal:
-                            out_data = edge_model_handle(func.model_name, to_dict)
-                        else:
-                            pass
+                                print("device parser expression syntax error" + e.msg)
 
-            if out_data is not None:
-                try:
-                    self.post_queue.put(out_data, block=True, timeout=TIME_OUT)
-                except Exception as e:
-                    log.debug(f"put msg to the post_queue Exception:{e}, queue:{self.post_queue.qsize()}")
+                            is_point_equal = False
+
+                            if "pointName" in device:
+                                point_expression = device["pointParseExpression"]
+                                try:
+                                    judge_point_express = "{} {}".format('func.device["pointName"]', point_expression)
+                                    is_point_equal = eval(judge_point_express)
+                                except SyntaxError as e:
+                                    print("point parser expression syntax error" + e.msg)
+                            else:
+                                is_point_equal = True
+                            if is_device_equal and is_point_equal:
+                                out_data = edge_model_handle(func.model_name, to_dict)
+                            else:
+                                pass
+
+                            if out_data is not None:
+                                try:
+                                    self.post_queue.put(out_data, block=True, timeout=TIME_OUT)
+                                except Exception as e:
+                                    log.debug(f"put msg to the post_queue Exception:{e}, "
+                                              f"queue:{self.post_queue.qsize()}")
 
     def make_run_thead(self):
         reading_thread_name = f"{self.sub_process_name}_read_mqtt"
