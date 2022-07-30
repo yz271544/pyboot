@@ -1,0 +1,18 @@
+rules:
+  - sub:
+      topic: "cloud/edge-data-access-a60c2306-1644570929743-e54d4620-8b1a-11ec-9969-df2a36238047"
+      name: "mosquitto-20336454-5413-4e2f-b52e-b945291359c7"
+      clientid: "ae03af75-13f5-4cf9-9145-0fea4e6ff1e4"
+    pub:
+      topic: "cloud/edge-pyboot-e060ff31-1644570929743-e54d4620-8b1a-11ec-9969-df2a36238047"
+      name: "mosquitto-20336454-5413-4e2f-b52e-b945291359c7"
+      clientid: "ef2712a2-926d-4388-92d0-60470ab2613d"
+funcs:
+  - model_address: "http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip"
+    model_md5: "pZ4DJ+YhYM9ppHD+VhLi+A=="
+    modelName: "TYPE_TREND_WARNING1644570851718"
+    pointName: "pyboot"
+    deviceName: "三厂-pyboot测试设备"
+mqtts:
+  - broker: "tcp://192.168.241.1:1883"
+    name: "mosquitto-20336454-5413-4e2f-b52e-b945291359c7"

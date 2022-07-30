@@ -167,14 +167,38 @@ class MqttThreader:
                     to_dict = json.loads(in_data)
                 except Exception:
                     pass
+                # todo! parse and distribution data, or jsonpath xpath
                 # out_data = self.edge_model_func(to_dict, None)
                 if self.funcs is not None and len(self.funcs) > 0:
                     for func in self.funcs:
-                        if func.device_name == to_dict["deviceInfo"]["deviceName"]:
-                            if func.point_name in to_dict["telemetry"] or func.point_name == "":
-                                out_data = edge_model_handle(func.model_name, to_dict)
-                            else:
-                                pass
+                        # if func.device["deviceName"] == to_dict["deviceInfo"]["deviceName"]:
+                        #     if func.device["pointName"] in to_dict["telemetry"] or func.device["pointName"] == "":
+                        #         out_data = edge_model_handle(func.model_name, to_dict)
+                        #     else:
+                        #         pass
+                        is_device_equal = False
+                        device_expression = func.device["deviceParseExpression"]
+                        try:
+                            judge_device_express = "{} {}".format('func.device["deviceName"]', device_expression)
+                            is_device_equal = eval(judge_device_express)
+                        except SyntaxError as e:
+                            print("device parser expression syntax error" + e.msg)
+
+                        is_point_equal = False
+
+                        if "pointName" in func.device:
+                            point_expression = func.device["pointParseExpression"]
+                            try:
+                                judge_point_express = "{} {}".format('func.device["pointName"]', point_expression)
+                                is_point_equal = eval(judge_point_express)
+                            except SyntaxError as e:
+                                print("point parser expression syntax error" + e.msg)
+                        else:
+                            is_point_equal = True
+                        if is_device_equal and is_point_equal:
+                            out_data = edge_model_handle(func.model_name, to_dict)
+                        else:
+                            pass
 
             if out_data is not None:
                 try:

@@ -65,8 +65,7 @@ class EdgeFuncConfig(json.JSONEncoder):
         self.model_address = kwargs['model_address'] if 'model_address' in kwargs else ""
         self.model_md5 = kwargs['model_md5'] if 'model_md5' in kwargs else ""
         self.model_name = kwargs['modelName'] if 'modelName' in kwargs else ""
-        self.device_name = kwargs['deviceName'] if 'deviceName' in kwargs else ""
-        self.point_name = kwargs['pointName'] if 'pointName' in kwargs else ""
+        self.device = kwargs['device'] if 'device' in kwargs else []
 
     def default(self, obj):
         if isinstance(obj, bytes):
@@ -76,9 +75,8 @@ class EdgeFuncConfig(json.JSONEncoder):
 
     def __repr__(self):
         return "%s(model_address=%r, model_md5=%r, model_name=%r, " \
-               "device_name=%r, point_name=%r)" % (
-                   self.__class__.__name__, self.model_address, self.model_md5, self.model_name,
-                   self.device_name, self.point_name)
+               "device=%r)" % (
+                   self.__class__.__name__, self.model_address, self.model_md5, self.model_name, self.device)
 
 
 class BaseConfig(json.JSONEncoder):

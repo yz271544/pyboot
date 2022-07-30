@@ -26,8 +26,12 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
-            "deviceName": "dev2",
-            "pointName": "OPCtemperature",
+            "device": [
+                {
+                    "deviceName": "dev2",
+                    "pointName": "OPCtemperature"
+                }
+            ]
         }
         func = EdgeFuncConfig(**f)
         model_record = ModelRecord()
@@ -44,8 +48,12 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
-            "deviceName": "dev2",
-            "pointName": "OPCtemperature",
+            "device": [
+                {
+                    "deviceName": "dev2",
+                    "pointName": "OPCtemperature"
+                }
+            ]
         }
         func = EdgeFuncConfig(**f)
         model_record = ModelRecord()
@@ -60,8 +68,12 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
-            "deviceName": "dev2",
-            "pointName": "OPCtemperature",
+            "device": [
+                {
+                    "deviceName": "dev2",
+                    "pointName": "OPCtemperature"
+                }
+            ]
         }
         func1 = EdgeFuncConfig(**f1)
 
@@ -69,8 +81,12 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
-            "deviceName": "dev2",
-            "pointName": "OPCtemperature",
+            "device": [
+                {
+                    "deviceName": "dev2",
+                    "pointName": "OPCtemperature"
+                }
+            ]
         }
         func2 = EdgeFuncConfig(**f2)
 
@@ -89,8 +105,12 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
-            "deviceName": "dev2",
-            "pointName": "OPCtemperature",
+            "device": [
+                {
+                    "deviceName": "dev2",
+                    "pointName": "OPCtemperature"
+                }
+            ]
         }
         func1 = EdgeFuncConfig(**f1)
 
@@ -98,8 +118,12 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
-            "deviceName": "dev2",
-            "pointName": "OPCtemperature",
+            "device": [
+                {
+                    "deviceName": "dev2",
+                    "pointName": "OPCtemperature"
+                }
+            ]
         }
         func2 = EdgeFuncConfig(**f2)
 
@@ -107,8 +131,12 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "ggggg",
             "modelName": "multivar_dev2_OPCxxxx",
-            "deviceName": "dev2",
-            "pointName": "OPCtemperature",
+            "device": [
+                {
+                    "deviceName": "dev2",
+                    "pointName": "OPCtemperature"
+                }
+            ]
         }
         func3 = EdgeFuncConfig(**f3)
 
