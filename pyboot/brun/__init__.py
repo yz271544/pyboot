@@ -17,8 +17,8 @@ from pyboot.conf.base_conf_starter import BaseConfStarter
 from pyboot.web.flask.flask_server import FlaskStarter
 
 starterRegister = StarterRegister()
-starterRegister.Register(BaseConfStarter())
 starterRegister.Register(LoggerStarter())
+starterRegister.Register(BaseConfStarter())
 starterRegister.Register(ProcessorStarter())
 # starterRegister.Register(TornadoServer())
 starterRegister.Register(FlaskStarter())
