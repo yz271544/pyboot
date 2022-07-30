@@ -75,9 +75,13 @@ class EvalExpression(unittest.TestCase):
 
         print(device_name)
 
+        eval('\'三厂-pyboot测试设备\' == json_data[\'deviceInfo\'][\'deviceName\']')
+
+        print(device_name)
+
         # print(json_data)
-        print(parse("$.deviceInfo.deviceName").find(json_data))
-        print(parse(r"$.deviceInfo.deviceName").find(json_data))
-        print(parse("""$.deviceInfo.deviceName""").find(json_data))
+        # print(parse("$.deviceInfo.deviceName").find(json_data))
+        # print(parse(r"$.deviceInfo.deviceName").find(json_data))
+        # print(parse("""$.deviceInfo.deviceName""").find(json_data))
 
         # print(parse("""$.deviceInfo.?deviceName='三厂-pyboot测试设备'""").find(json_data))

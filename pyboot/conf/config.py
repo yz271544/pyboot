@@ -158,7 +158,7 @@ class RuleSchema(marshmallow.Schema):
 class DeviceAttrSchema(marshmallow.Schema):
     attrName = marshmallow.fields.Str()
     attrValue = marshmallow.fields.Str()
-    attrExpresion = marshmallow.fields.Str()
+    attrExpression = marshmallow.fields.Str()
 
     @marshmallow.post_load
     def make_rule(self, data, **kwargs):

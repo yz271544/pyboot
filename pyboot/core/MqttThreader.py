@@ -20,7 +20,9 @@ from pyboot.conf import EdgeFuncConfig
 from pyboot.conf.settings import MAX_QUEUE, TIME_OUT, MAX_EDGE_NUM, MODEL_REF_PREFIX, PYBOOT_HOME
 from pyboot.core.MqttClient import MqttClient
 from pyboot.logger import log
+from pyboot.utils.common.StringUtils import StringUtils
 from pyboot.utils.error.Errors import UnknownArgNum
+
 
 # MAX_QUEUE = 1000
 # TIME_OUT = 120
@@ -66,9 +68,9 @@ class MqttThreader:
                  post_port: int,
                  post_topic: str,
                  post_qos: int,
-                 funcs: [EdgeFuncConfig]):
-                 # edge_model_pkg_name,
-                 # edge_model_func_name):
+                 func: EdgeFuncConfig):
+        # edge_model_pkg_name,
+        # edge_model_func_name):
         self.sub_process_name = sub_process_name
         self.pre_queue = Queue(maxsize=MAX_QUEUE)
         self.pre_broker_protocol = pre_broker_protocol
@@ -82,7 +84,7 @@ class MqttThreader:
         self.post_port = post_port
         self.post_topic = post_topic
         self.post_qos = post_qos
-        self.funcs = funcs
+        self.func = func
         # self.edge_model_pkg_name = edge_model_pkg_name
         # self.edge_model_func_name = edge_model_func_name
         # self.edge_model_func = self.load_edge_model(self.edge_model_pkg_name, self.edge_model_func_name)
@@ -155,58 +157,47 @@ class MqttThreader:
     def edge_model_calc(self):
         while True:
             in_data = None
-            out_data = None
             try:
                 in_data = self.pre_queue.get(block=True, timeout=TIME_OUT)
             except Exception as e:
                 log.debug(f"get msg from pre_queue Exception:{e}, queue:{self.pre_queue.qsize()}")
 
             if in_data is not None:
-                to_dict = {}
+                data_to_dict = {}
                 try:
-                    to_dict = json.loads(in_data)
-                except Exception:
-                    pass
+                    data_to_dict = json.loads(in_data)
+                except Exception as e:
+                    continue
+                    # log.error(f"load data error:{e}")
+                    # pass
                 # todo! parse and distribution data, or jsonpath xpath
-                # out_data = self.edge_model_func(to_dict, None)
-                if self.funcs is not None and len(self.funcs) > 0:
-                    for func in self.funcs:
-                        # if func.device["deviceName"] == to_dict["deviceInfo"]["deviceName"]:
-                        #     if func.device["pointName"] in to_dict["telemetry"] or func.device["pointName"] == "":
-                        #         out_data = edge_model_handle(func.model_name, to_dict)
-                        #     else:
-                        #         pass
-                        for device in func.devices:
-                            is_device_equal = False
-                            device_expression = device["deviceParseExpression"]
-                            try:
-                                judge_device_express = "{} {}".format('func.device["deviceName"]', device_expression)
-                                is_device_equal = eval(judge_device_express)
-                            except SyntaxError as e:
-                                print("device parser expression syntax error" + e.msg)
-
-                            is_point_equal = False
-
-                            if "pointName" in device:
-                                point_expression = device["pointParseExpression"]
-                                try:
-                                    judge_point_express = "{} {}".format('func.device["pointName"]', point_expression)
-                                    is_point_equal = eval(judge_point_express)
-                                except SyntaxError as e:
-                                    print("point parser expression syntax error" + e.msg)
-                            else:
-                                is_point_equal = True
-                            if is_device_equal and is_point_equal:
-                                out_data = edge_model_handle(func.model_name, to_dict)
-                            else:
-                                pass
-
-                            if out_data is not None:
-                                try:
-                                    self.post_queue.put(out_data, block=True, timeout=TIME_OUT)
-                                except Exception as e:
-                                    log.debug(f"put msg to the post_queue Exception:{e}, "
-                                              f"queue:{self.post_queue.qsize()}")
+                for device in self.func.devices:
+                    attrs = device["device"]
+                    is_equal = False
+                    for attr in attrs:
+                        attr_name = attr["attrName"]
+                        attr_value = attr["attrValue"]
+                        attr_express = attr["attrExpression"]
+                        try:
+                            judge_device_express = "{} {}".format(StringUtils.mkstring_bracket(attr_value, "'"),
+                                                                  attr_express)
+                            is_equal = eval(judge_device_express)
+                        except SyntaxError as e:
+                            log.debug(f"device {attr_name} parser expression {attr_express} syntax error" + e.msg)
+                            continue
+                        else:
+                            log.debug(f"is_equal:{is_equal}")
+                    if not is_equal:
+                        continue
+                    log.debug(f"Thread:{threading.currentThread().getName()} in_data: {data_to_dict}")
+                    out_data = edge_model_handle(self.func.model_name, data_to_dict)
+                    log.debug(f"Thread:{threading.currentThread().getName()} out_data: {out_data}")
+                    if out_data is not None:
+                        try:
+                            self.post_queue.put(out_data, block=True, timeout=TIME_OUT)
+                        except Exception as e:
+                            log.debug(f"put msg to the post_queue Exception:{e}, "
+                                      f"queue:{self.post_queue.qsize()}")
 
     def make_run_thead(self):
         reading_thread_name = f"{self.sub_process_name}_read_mqtt"
@@ -218,14 +209,14 @@ class MqttThreader:
         writing_thread = threading.Thread(target=self.post_threader, name=writing_thread_name)
         writing_thread.daemon = True
         self.thread_box.append(writing_thread)
-        # 单进程测试使用
+        # 单线程测试使用
         # edge_model_thread = threading.Thread(target=self.edge_model_calc, args=(0,))
         # edge_model_thread.daemon = True
 
         reading_thread.start()
         writing_thread.start()
 
-        # 单进程测试使用
+        # 单线程测试使用
         # edge_model_thread.start()
 
         # 子进程无阻塞,将部分线程运行在子进程的主线程中

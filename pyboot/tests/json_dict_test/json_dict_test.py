@@ -60,3 +60,8 @@ def test_json_dict():
     print(dd)
 
 
+@pytest.mark.base
+def test_get_uuid():
+    import uuid
+    print(uuid.uuid4())
+

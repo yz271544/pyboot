@@ -28,14 +28,18 @@ class ModelRecordTest(unittest.TestCase):
             "modelName": "multivar_dev2_OPCtemperature",
             "devices": [
                 {
-                    "attrName": "deviceName",
-                    "attrValue": "三厂-pyboot测试设备",
-                    "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
-                },
-                {
-                    "attrName": "pointName",
-                    "attrValue": "pyboot",
-                    "attrExpression": "in data_to_dict['telemetry']"
+                    "device": [
+                        {
+                            "attrName": "deviceName",
+                            "attrValue": "三厂-pyboot测试设备",
+                            "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
+                        },
+                        {
+                            "attrName": "pointName",
+                            "attrValue": "pyboot",
+                            "attrExpression": "in data_to_dict['telemetry']"
+                        }
+                    ]
                 }
             ]
         }
@@ -54,10 +58,20 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
-            "device": [
+            "devices": [
                 {
-                    "deviceName": "dev2",
-                    "pointName": "OPCtemperature"
+                    "device": [
+                        {
+                            "attrName": "deviceName",
+                            "attrValue": "三厂-pyboot测试设备",
+                            "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
+                        },
+                        {
+                            "attrName": "pointName",
+                            "attrValue": "pyboot",
+                            "attrExpression": "in data_to_dict['telemetry']"
+                        }
+                    ]
                 }
             ]
         }
@@ -74,10 +88,20 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
-            "device": [
+            "devices": [
                 {
-                    "deviceName": "dev2",
-                    "pointName": "OPCtemperature"
+                    "device": [
+                        {
+                            "attrName": "deviceName",
+                            "attrValue": "三厂-pyboot测试设备",
+                            "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
+                        },
+                        {
+                            "attrName": "pointName",
+                            "attrValue": "pyboot",
+                            "attrExpression": "in data_to_dict['telemetry']"
+                        }
+                    ]
                 }
             ]
         }
@@ -87,10 +111,20 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
-            "device": [
+            "devices": [
                 {
-                    "deviceName": "dev2",
-                    "pointName": "OPCtemperature"
+                    "device": [
+                        {
+                            "attrName": "deviceName",
+                            "attrValue": "三厂-pyboot测试设备",
+                            "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
+                        },
+                        {
+                            "attrName": "pointName",
+                            "attrValue": "pyboot",
+                            "attrExpression": "in data_to_dict['telemetry']"
+                        }
+                    ]
                 }
             ]
         }
@@ -111,10 +145,20 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
-            "device": [
+            "devices": [
                 {
-                    "deviceName": "dev2",
-                    "pointName": "OPCtemperature"
+                    "device": [
+                        {
+                            "attrName": "deviceName",
+                            "attrValue": "三厂-pyboot测试设备",
+                            "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
+                        },
+                        {
+                            "attrName": "pointName",
+                            "attrValue": "pyboot",
+                            "attrExpression": "in data_to_dict['telemetry']"
+                        }
+                    ]
                 }
             ]
         }
@@ -124,10 +168,20 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
-            "device": [
+            "devices": [
                 {
-                    "deviceName": "dev2",
-                    "pointName": "OPCtemperature"
+                    "device": [
+                        {
+                            "attrName": "deviceName",
+                            "attrValue": "三厂-pyboot测试设备",
+                            "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
+                        },
+                        {
+                            "attrName": "pointName",
+                            "attrValue": "pyboot",
+                            "attrExpression": "in data_to_dict['telemetry']"
+                        }
+                    ]
                 }
             ]
         }
@@ -137,10 +191,20 @@ class ModelRecordTest(unittest.TestCase):
             "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "ggggg",
             "modelName": "multivar_dev2_OPCxxxx",
-            "device": [
+            "devices": [
                 {
-                    "deviceName": "dev2",
-                    "pointName": "OPCtemperature"
+                    "device": [
+                        {
+                            "attrName": "deviceName",
+                            "attrValue": "三厂-pyboot测试设备",
+                            "attrExpression": "== data_to_dict['deviceInfo']['deviceName']"
+                        },
+                        {
+                            "attrName": "pointName",
+                            "attrValue": "pyboot",
+                            "attrExpression": "in data_to_dict['telemetry']"
+                        }
+                    ]
                 }
             ]
         }

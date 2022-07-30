@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*- 
 # Project: spd-sxmcc 
 """
-@file: telemetry.py.py
+@file: index.py.py
 @author: etl
 @time: Created on 8/18/21 2:09 PM
 @env: Python @desc:
@@ -28,6 +28,11 @@ def telm_temperature(payload):
         return ret
 
 
+def handler(event, context):
+    telm_temperature(event)
+    return event
+
+
 if __name__ == '__main__':
     m1 = "test_1234"
     p1 = telm_body_len(m1)
@@ -45,3 +50,6 @@ if __name__ == '__main__':
           "data": {"name": "lyndon", "books": 500, "mary": True, "children": ["nn", "jy"]}}
     p4 = telm_temperature(m4)
     print(p4)
+
+    p5 = handler(m4, None)
+    print(p5)

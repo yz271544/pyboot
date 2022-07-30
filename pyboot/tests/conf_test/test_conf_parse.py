@@ -16,12 +16,12 @@ import yaml
 from pyboot.conf import PYBOOT_HOME, get_mqtt_conf, get_base_conf
 
 # pytest -s -m "base" pyboot/tests/conf_test/test_conf_parse.py::test_load_from_yaml
-from pyboot.conf.config import MqttSchema, RuleSchema, parse_host
+from pyboot.conf.config import MqttSchema, RuleSchema, parse_host, BaseConfig
 
 
 @pytest.mark.base
 def test_load_from_yaml():
-    conf = os.path.join(PYBOOT_HOME, "conf/config_new.yaml")
+    conf = os.path.join(PYBOOT_HOME, "conf/config.yaml")
     df = open(conf, 'r')
     config = yaml.load(df.read(), Loader=yaml.FullLoader)
     print(config)
@@ -47,7 +47,7 @@ def test_load_from_yaml():
 # pytest -s -m "base" pyboot/tests/conf_test/test_conf_parse.py::test_load_rules
 @pytest.mark.base
 def test_load_rules():
-    conf = os.path.join(PYBOOT_HOME, "conf/config_new.yaml")
+    conf = os.path.join(PYBOOT_HOME, "conf/config.yaml")
     df = open(conf, 'r')
     config = yaml.load(df.read(), Loader=yaml.FullLoader)
     print(config)
@@ -73,8 +73,8 @@ def test_load_rules():
 @pytest.mark.base
 def test_loads_rules():
     base_config = get_base_conf()
-    print(base_config)
-    # print(json.dumps(base_config, cls=BaseConfig, indent=4))
+    # print(base_config)
+    print(json.dumps(base_config, cls=BaseConfig, indent=4))
 
 
 @pytest.mark.base

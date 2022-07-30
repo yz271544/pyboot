@@ -14,7 +14,18 @@ funcs:
       attrValue: pyboot
   modelAddress: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
   modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
-  modelName: TYPE_TREND_WARNING1644570851718
+  modelName: industry
+- devices:
+  - device:
+    - attrExpression: == data_to_dict['deviceInfo']['deviceName']
+      attrName: deviceName
+      attrValue: 三厂-pyboot测试设备
+    - attrExpression: in data_to_dict['telemetry']
+      attrName: pointName
+      attrValue: pyboot
+  modelAddress: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
+  modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
+  modelName: test
 mqtts:
 - broker: tcp://192.168.241.1:1883
   name: mosquitto-20336454-5413-4e2f-b52e-b945291359c7
