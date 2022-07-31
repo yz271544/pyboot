@@ -1,4 +1,4 @@
-VERSION="v0.0.1"
+VERSION="v2.0.0RC"
 # usage:
 # base images: make images IMAGE_TAG=latest REPO=docker.gridsumdissector.com/
 # tensorflow images: make image-on-tensorflow IMAGE_TAG=latest REPO=docker.gridsumdissector.com/
