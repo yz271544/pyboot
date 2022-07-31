@@ -104,7 +104,7 @@ class MqttThreader:
                 log.debug(f"pre_on_message get message from mqtt:{message}")
                 pre_queue.put(message, block=False, timeout=TIME_OUT)
             except Exception as e:
-                log.debug(f"put msg to the pre_queue Exception:{e}, queue:{pre_queue.qsize()}")
+                log.error(f"put msg to the pre_queue Exception:{e}, queue:{pre_queue.qsize()}")
 
         mqtt_client = MqttClient(self.pre_broker_protocol,
                                  self.pre_broker_host,
@@ -116,7 +116,7 @@ class MqttThreader:
         try:
             mqtt_client.run_consumer()
         except Exception as e:
-            log.debug(f"consume mqtt failed!{e}")
+            log.error(f"consume mqtt failed!{e}")
             pass
 
     def post_threader_t(self):
@@ -126,7 +126,7 @@ class MqttThreader:
                 data = self.pre_queue.get(block=True, timeout=TIME_OUT)
                 log.debug(f"post_threader get data:{data}")
             except Exception as e:
-                log.debug(f"get from the pre_queue Exception:{e}, queue:{self.pre_queue.qsize()}")
+                log.error(f"get from the pre_queue Exception:{e}, queue:{self.pre_queue.qsize()}")
                 pass
 
     def post_threader(self):
@@ -142,7 +142,7 @@ class MqttThreader:
                 data = self.post_queue.get(block=True, timeout=TIME_OUT)
                 log.debug(f"post_threader get data:{data}")
             except Exception as e:
-                log.debug(f"get from the pre_queue Exception:{e}, queue:{self.post_queue.qsize()}")
+                log.error(f"get from the pre_queue Exception:{e}, queue:{self.post_queue.qsize()}")
                 continue
 
             try:
@@ -151,7 +151,7 @@ class MqttThreader:
                     data = json.dumps(data)
                     mqtt_client.run_publish(data)
             except Exception as e:
-                log.debug(f"publish mqtt failed:{e}")
+                log.error(f"publish mqtt failed:{e}")
                 continue
 
     def edge_model_calc(self):
@@ -183,7 +183,7 @@ class MqttThreader:
                                                                   attr_express)
                             is_equal = eval(judge_device_express)
                         except SyntaxError as e:
-                            log.debug(f"device {attr_name} parser expression {attr_express} syntax error" + e.msg)
+                            log.error(f"device {attr_name} parser expression {attr_express} syntax error" + e.msg)
                             continue
                         else:
                             log.debug(f"is_equal:{is_equal}")
@@ -196,7 +196,7 @@ class MqttThreader:
                         try:
                             self.post_queue.put(out_data, block=True, timeout=TIME_OUT)
                         except Exception as e:
-                            log.debug(f"put msg to the post_queue Exception:{e}, "
+                            log.error(f"put msg to the post_queue Exception:{e}, "
                                       f"queue:{self.post_queue.qsize()}")
 
     def make_run_thead(self):
