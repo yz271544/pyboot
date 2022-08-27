@@ -43,6 +43,7 @@ def download_by_funcs(funcs: [EdgeFuncConfig]):
             except Exception as e:
                 log.error(f"remove file {download_target_file} failed", stack_info=True)
 
+
 def download(http, **kwargs):
     func = kwargs['func']
     model_compress_file_name = extract_filename_from_url(func.model_address)

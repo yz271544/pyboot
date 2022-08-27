@@ -94,11 +94,11 @@
         "items": {
           "type": "object",
           "properties": {
-            "model_address": {
+            "modelAddress": {
               "type": "string",
               "title": "模型压缩包地址"
             },
-            "model_md5": {
+            "modelMd5": {
               "type": "string",
               "title": "模型压缩包md5"
             },
@@ -108,24 +108,30 @@
             },
             "devices": {
               "type": "array",
+              "title": "设备",
               "items": {
                 "type": "object",
                 "properties": {
-                  "deviceName": {
-                    "type": "string",
-                    "title": "设备名称"
-                  },
-                  "deviceParseExpression": {
-                    "type": "string",
-                    "title": "设备名称解析表达式"
-                  },
-                  "pointName": {
-                    "type": "string",
-                    "title": "测点名称"
-                  },
-                  "pointParseExpression": {
-                    "type": "string",
-                    "title": "设备测点解析表达式"
+                  "device": {
+                    "type": "array",
+                    "title": "属性",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "attrName": {
+                          "type": "string",
+                          "title": "属性名称"
+                        },
+                        "attrValue": {
+                          "type": "string",
+                          "title": "属性值"
+                        },
+                        "attrExpression": {
+                          "type": "string",
+                          "title": "对应数据解析表达式"
+                        }
+                      }
+                    }
                   }
                 }
               }

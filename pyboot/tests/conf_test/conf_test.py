@@ -8,11 +8,17 @@
 @env: Python @desc:
 @ref: @blog:
 """
+import json
+import os
+
 import pytest
+import yaml
+
 import pyboot.conf as pybootconf
+from pyboot.conf import FuncSchema
 
 
-@pytest.mark.base
+@pytest.mark.skip("和现在的设计不符合")
 def test_load_from_yaml():
     baseConf = pybootconf.get_base_conf()
     edge1 = baseConf.edge[0]
@@ -36,3 +42,19 @@ def test_format_str():
     funName = "testFunc"
     print(f"FuncName:{funName}")
 
+
+@pytest.mark.base
+def test_load_check_funcs():
+    with open("/lyndon/iProject/pypath/pyboot/pyboot/conf/config.yaml", 'r', encoding='utf-8') as cf:
+        cnf = yaml.load(cf.read(), Loader=yaml.FullLoader)
+        func_schema = FuncSchema(many=True)
+        funcs = func_schema.dump(cnf['funcs'])
+        print(json.dumps(funcs))
+
+@pytest.mark.base
+def test_get_env_bool():
+    from distutils.util import strtobool
+    a = "False"
+    print(strtobool(a))
+    b = True
+    print(b)

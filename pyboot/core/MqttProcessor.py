@@ -27,7 +27,7 @@ class MqttProcessor:
         self.edges = edges
         self.funcs = funcs
 
-    def process_maker(self, edge: EdgeModelConfig, funcs: EdgeFuncConfig, sub_process_name: str, queue: Queue):
+    def process_maker(self, edge: EdgeModelConfig, func: EdgeFuncConfig, sub_process_name: str, queue: Queue):
         log.info('%s [%s] is running, parent id is [%s]' % (os.getpid(), sub_process_name, os.getppid()))
         edge_model_conf = edge
         # print(f'edge_model_conf:{edge_model_conf}')
@@ -45,7 +45,7 @@ class MqttProcessor:
                                          edge_model_conf.post_broker_port,
                                          edge_model_conf.post_topic,
                                          edge_model_conf.post_qos,
-                                         funcs)
+                                         func)
                                          #edge_model_pkg_name, edge_model_func_name)
             mqtt_threader.make_run_thead()
             while True:
@@ -79,18 +79,32 @@ class MqttProcessor:
 
         # print('主', os.getpid(), os.getppid())
 
+        # for edge in self.edges:
+        #     edge_model_conf = edge
+        #     for i in range(edge_model_conf.instance):
+        #         q = Queue()
+        #         process_name = f"sub_process_{edge_model_conf.name}_{i}"
+        #         p = Process(target=self.process_maker, args=(edge_model_conf, self.funcs, process_name, q),
+        #                     name=process_name)
+        #         p.daemon = True
+        #         self.q_list.append(q)
+        #         self.p_list.append(p)
+        #         p.start()
+        # print("---------------------- 多进程测试使用 ---------------------------------")
         for edge in self.edges:
             edge_model_conf = edge
-            for i in range(edge_model_conf.instance):
+            i = 0
+            for func in self.funcs:
                 q = Queue()
-                process_name = f"sub_process_{edge_model_conf.name}_{i}"
-                p = Process(target=self.process_maker, args=(edge_model_conf, self.funcs, process_name, q),
+                process_name = f"sub_process_{edge.name}_{func.model_name}_{i}"
+                p = Process(target=self.process_maker, args=(edge_model_conf, func, process_name, q),
                             name=process_name)
                 p.daemon = True
                 self.q_list.append(q)
                 self.p_list.append(p)
                 p.start()
-        # print("---------------------- 多进程测试使用 ---------------------------------")
+                i += 1
+
 
     @classmethod
     def query_queue_size(cls):

@@ -13,7 +13,7 @@
 
 import os
 import sys
-
+from distutils.util import strtobool
 
 # print('__file__={0:<35} | __name__={1:<20} | __package__={2:<20}'.format(__file__, __name__, str(__package__)))
 # 调试模式是否开启
@@ -61,13 +61,19 @@ except Exception as e:
     # print("settings sys.path:", sys.path)
     # PYBOOT_HOME = os.getcwd()
 
+try:
+    MAX_EDGE_NUM = int(os.environ["MAX_EDGE_NUM"])
+except Exception as e:
+    MAX_EDGE_NUM = 10
+    pass
+
 MODEL_RECORD = os.path.join(PYBOOT_HOME, "conf/model_record.txt")
 MODEL_PATH = os.path.join(PYBOOT_HOME, "modules/gridsum/science")
 MODEL_REF_PREFIX = "pyboot/modules/gridsum/science"
 CHECK_SIZE = 2048
 
 try:
-    DOWNLOAD_MODEL = bool(os.environ["DOWNLOAD_MODEL"])
+    DOWNLOAD_MODEL = strtobool(os.environ["DOWNLOAD_MODEL"])
 except Exception as e:
     DOWNLOAD_MODEL = False
 
