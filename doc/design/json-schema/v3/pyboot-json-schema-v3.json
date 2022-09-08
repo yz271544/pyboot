@@ -112,9 +112,13 @@
               "items": {
                 "type": "object",
                 "properties": {
-                  "device": {
+                  "deviceName": {
+                    "type": "string",
+                    "title": "设备名称"
+                  },
+                  "deviceAttr": {
                     "type": "array",
-                    "title": "属性",
+                    "title": "设备属性",
                     "items": {
                       "type": "object",
                       "properties": {
