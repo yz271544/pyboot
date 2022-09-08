@@ -5,24 +5,26 @@ expose:
   protocolPort: http://:8080
 funcs:
 - devices:
-  - device:
+  - deviceName: "三厂-pyboot测试设备1"
+    deviceAttr:
     - attrExpression: == data_to_dict['deviceInfo']['deviceName']
       attrName: deviceName
-      attrValue: 三厂-pyboot测试设备
+      attrValue: 三厂-pyboot测试设备1
     - attrExpression: in data_to_dict['telemetry']
       attrName: pointName
-      attrValue: pyboot
+      attrValue: pyboot1
   modelAddress: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
   modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
   modelName: industry
 - devices:
-  - device:
+  - deviceName: "三厂-pyboot测试设备2"
+    deviceAttr:
     - attrExpression: == data_to_dict['deviceInfo']['deviceName']
       attrName: deviceName
-      attrValue: 三厂-pyboot测试设备
+      attrValue: 三厂-pyboot测试设备2
     - attrExpression: in data_to_dict['telemetry']
       attrName: pointName
-      attrValue: pyboot
+      attrValue: pyboot2
   modelAddress: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
   modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
   modelName: test

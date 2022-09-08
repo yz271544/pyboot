@@ -172,7 +172,8 @@ class MqttThreader:
                     # pass
                 # todo! parse and distribution data, or jsonpath xpath
                 for device in self.func.devices:
-                    attrs = device["device"]
+                    device_name = device["deviceName"]
+                    attrs = device["deviceAttr"]
                     is_equal = False
                     for attr in attrs:
                         attr_name = attr["attrName"]
@@ -183,10 +184,10 @@ class MqttThreader:
                                                                   attr_express)
                             is_equal = eval(judge_device_express)
                         except SyntaxError as e:
-                            log.error(f"device {attr_name} parser expression {attr_express} syntax error" + e.msg)
+                            log.error(f"device {device_name} {attr_name} parser expression {attr_express} syntax error" + e.msg)
                             continue
                         else:
-                            log.debug(f"is_equal:{is_equal}")
+                            log.debug(f"is_equal:{device_name} <= {is_equal}")
                     if not is_equal:
                         continue
                     log.debug(f"Thread:{threading.currentThread().getName()} in_data: {data_to_dict}")
@@ -196,7 +197,7 @@ class MqttThreader:
                         try:
                             self.post_queue.put(out_data, block=True, timeout=TIME_OUT)
                         except Exception as e:
-                            log.error(f"put msg to the post_queue Exception:{e}, "
+                            log.error(f"put {device_name} data to the post_queue Exception:{e}, "
                                       f"queue:{self.post_queue.qsize()}")
 
     def make_run_thead(self):
