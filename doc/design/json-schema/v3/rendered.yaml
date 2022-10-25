@@ -1,0 +1,44 @@
+expose:
+- desc: monitor the container
+  name: monitor
+  outPort: 38080
+  protocolPort: http://:8080
+funcs:
+- modelName: industry
+  modelAddress: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
+  modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
+  devices:
+  - deviceAttr:
+    - attrExpression: == data_to_dict['deviceInfo']['deviceName']
+      attrName: deviceName
+      attrValue: 三厂-pyboot测试设备1
+    - attrExpression: in data_to_dict['telemetry']
+      attrName: pointName
+      attrValue: pyboot1
+    deviceName: 三厂-pyboot测试设备1
+- modelName: test
+  modelAddress: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
+  modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
+  devices:
+  - deviceAttr:
+    - attrExpression: == data_to_dict['deviceInfo']['deviceName']
+      attrName: deviceName
+      attrValue: 三厂-pyboot测试设备2
+    - attrExpression: in data_to_dict['telemetry']
+      attrName: pointName
+      attrValue: pyboot2
+    deviceName: 三厂-pyboot测试设备2
+mqtts:
+- broker: tcp://192.168.241.1:1883
+  name: mosquitto-20336454-5413-4e2f-b52e-b945291359c7
+  retain: false
+rules:
+- pub:
+    clientId: ef2712a2-926d-4388-92d0-60470ab2613d
+    name: mosquitto-20336454-5413-4e2f-b52e-b945291359c7
+    timeout: 100
+    topic: cloud/edge-pyboot-e060ff31-1644570929743-e54d4620-8b1a-11ec-9969-df2a36238047
+  sub:
+    clientId: ae03af75-13f5-4cf9-9145-0fea4e6ff1e4
+    name: mosquitto-20336454-5413-4e2f-b52e-b945291359c7
+    topic: cloud/edge-data-access-a60c2306-1644570929743-e54d4620-8b1a-11ec-9969-df2a36238047
