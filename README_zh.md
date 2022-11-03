@@ -82,7 +82,7 @@ funcs:
 ```shell
 pip install -r pyboot/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-export PYTHONPATH=$PYTHONPATH:`pwd`:'pwd'/pyboot
+export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/pyboot
 
 python pyboot/brun/main.py
 

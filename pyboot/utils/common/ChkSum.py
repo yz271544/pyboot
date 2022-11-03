@@ -48,3 +48,28 @@ def GetBase64Md5Byte(md5_value):
     sbm = ''.join(sbm[:-1].split())
     return sbm
 
+
+def get_md5_from_small_file(file_path):
+    md5 = None
+    if os.path.isfile(file_path):
+        f = open(file_path,'rb')
+        md5_obj = hashlib.md5()
+        md5_obj.update(f.read())
+        hash_code = md5_obj.hexdigest()
+        f.close()
+        md5 = str(hash_code).lower()
+    return md5
+
+
+def get_md5_from_big_file(file_path):
+    f = open(file_path,'rb')
+    md5_obj = hashlib.md5()
+    while True:
+        d = f.read(8096)
+        if not d:
+            break
+        md5_obj.update(d)
+    hash_code = md5_obj.hexdigest()
+    f.close()
+    md5 = str(hash_code).lower()
+    return md5
