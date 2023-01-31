@@ -1,0 +1,39 @@
+#FROM --platform=$TARGETPLATFORM python:3-slim-buster
+#FROM python:3.6-slim
+FROM --platform=$TARGETPLATFORM python:3.9.16
+
+RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
+RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
+RUN apt-get update && apt-get install libgomp1 telnet dnsutils unzip -y
+RUN apt-get install libopenblas-dev liblapack-dev libatlas-base-dev libblas-dev -y
+
+COPY ./_build/requirements.txt /home
+COPY ./_build/numpy-1.17.4.zip /tmp
+COPY ./_build/scipy-1.4.0.tar.gz /tmp
+COPY ./_build/scikit-image-0.16.2.tar.gz /tmp
+COPY ./_build/scikit-learn-0.20.3.tar.gz /tmp
+RUN mkdir ~/.pip
+RUN echo "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host = https://pypi.tuna.tsinghua.edu.cn\n[list]\nformat = columns" > ~/.pip/pip.conf
+RUN python -m pip install --upgrade pip
+RUN unzip /tmp/numpy-1.17.4.zip -d /tmp
+# RUN tar -zxvf /tmp/scipy-1.4.0.tar.gz -C /tmp
+RUN tar -zxvf /tmp/scikit-image-0.16.2.tar.gz -C /tmp
+RUN tar -zxvf /tmp/scikit-learn-0.20.3.tar.gz -C /tmp
+WORKDIR /tmp/numpy-1.17.4
+RUN python setup.py install
+# WORKDIR /tmp/scipy-1.4.0
+# RUN python setup.py install
+RUN pip install scipy==1.4.0
+WORKDIR /tmp/scikit-image-0.16.2
+RUN python setup.py install
+WORKDIR /tmp/scikit-learn-0.20.3
+RUN python setup.py install
+RUN pip install -r /home/requirements-arm.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+
+
+ENV PYTHONPATH "/home/work"
+
+WORKDIR /home/work
+COPY ./pyboot /home/work/pyboot
+
+ENTRYPOINT ["python", "pyboot/brun/main.py"]

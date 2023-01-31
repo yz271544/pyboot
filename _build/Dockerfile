@@ -1,8 +1,14 @@
 #FROM --platform=$TARGETPLATFORM python:3-slim-buster
-FROM python:3.6-slim
+#FROM python:3.6-slim
+FROM --platform=$TARGETPLATFORM python:3.7.16-slim
 
 COPY ./_build/requirements.txt /home
-RUN pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN mkdir ~/.pip
+RUN echo "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host = https://pypi.tuna.tsinghua.edu.cn\n[list]\nformat = columns" > ~/.pip/pip.conf
+RUN python -m pip install --upgrade pip
+RUN pip install -r /home/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
+RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
 RUN apt-get update && apt-get install libgomp1 telnet dnsutils -y
 
 ENV PYTHONPATH "/home/work"
