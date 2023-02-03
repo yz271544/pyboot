@@ -1,6 +1,6 @@
 #FROM --platform=$TARGETPLATFORM python:3-slim-buster
 #FROM python:3.6-slim
-FROM --platform=$TARGETPLATFORM python:3.9.16
+FROM --platform=$TARGETPLATFORM python:3.9.16 as builder
 
 RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
 RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
@@ -51,8 +51,27 @@ RUN apt-get install cmake -y
 RUN pip install -r /home/requirements-arm.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
 
 
-ENV PYTHONPATH "/home/work"
+# ENV PYTHONPATH "/home/work"
 
+# WORKDIR /home/work
+# COPY ./pyboot /home/work/pyboot
+
+# ENTRYPOINT ["python", "pyboot/brun/main.py"]
+
+FROM --platform=$TARGETPLATFORM python:3.9.16
+RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
+RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
+RUN apt-get update && apt-get install libgomp1 telnet dnsutils unzip -y
+
+RUN apt-get install libopenblas-dev liblapack-dev libatlas-base-dev libblas-dev -y
+RUN mkdir ~/.pip
+RUN echo "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host = https://pypi.tuna.tsinghua.edu.cn\n[list]\nformat = columns" > ~/.pip/pip.conf
+RUN python -m pip install --upgrade pip
+
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+
+ENV PYTHONPATH "/home/work"
 WORKDIR /home/work
 COPY ./pyboot /home/work/pyboot
 
