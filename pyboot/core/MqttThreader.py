@@ -30,17 +30,18 @@ from pyboot.utils.error.Errors import UnknownArgNum
 
 
 def edge_model_handle(model_name, in_data_dict):
-    pkg_path = os.path.join(MODEL_REF_PREFIX, "%s/index" % model_name)
+    # pkg_path = os.path.join(MODEL_REF_PREFIX, "%s/index" % model_name)
+    pkg_path = "%s/%s/index" % (MODEL_REF_PREFIX, model_name)
 
-    if pkg_path[0] == os.sep:
+    # os.sep
+    if pkg_path[0] == "/":
         pkg_path = pkg_path[1:]
 
     # print("pkg_path: %s" % pkg_path)
-    slist = str(pkg_path).split(os.sep)
+    slist = str(pkg_path).split("/") # os.sep
     pkg_name = '.'.join(slist)
 
     # print("pkg_name: %s" % pkg_name)
-
     try:
         model_module = importlib.import_module(pkg_name)
         ret = model_module.handler(in_data_dict, None)

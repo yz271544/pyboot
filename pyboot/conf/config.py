@@ -171,15 +171,16 @@ class DeviceAttrSchema(marshmallow.Schema):
 
 
 class DeviceSchema(marshmallow.Schema):
-    device = marshmallow.fields.Nested(DeviceAttrSchema, many=True)
+    deviceName = marshmallow.fields.Str()
+    deviceAttr = marshmallow.fields.Nested(DeviceAttrSchema, many=True)
 
     @marshmallow.post_load
     def make_rule(self, data, **kwargs):
         return DeviceSchema(**data)
 
     def __repr__(self):
-        return "%s(device=%r)" % (
-            self.__class__.__name__, self.device
+        return "%s(device=%r, deviceName=%r, deviceAttr=%r)" % (
+            self.__class__.__name__, self.deviceName, self.deviceAttr
         )
 
 
