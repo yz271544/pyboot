@@ -23,7 +23,7 @@ class ModelRecordTest(unittest.TestCase):
     def test_add_record(self):
         # multivar_dev2_OPCtemperature###fafdafjadskfasfadfasf
         f = {
-            "modelAddress": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
+            "modelAmd64Address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "modelMd5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
             "devices": [
@@ -55,7 +55,7 @@ class ModelRecordTest(unittest.TestCase):
     def test_determine_new_record(self):
         # multivar_dev2_OPCtemperature###fafdafjadskfasfadfasf
         f = {
-            "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
+            "model_amd64_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
             "devices": [
@@ -85,7 +85,7 @@ class ModelRecordTest(unittest.TestCase):
     def test_determine_new_records(self):
         # multivar_dev2_OPCtemperature###fafdafjadskfasfadfasf
         f1 = {
-            "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
+            "model_amd64_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
             "devices": [
@@ -108,7 +108,7 @@ class ModelRecordTest(unittest.TestCase):
         func1 = EdgeFuncConfig(**f1)
 
         f2 = {
-            "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
+            "model_amd64_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
             "devices": [
@@ -142,7 +142,7 @@ class ModelRecordTest(unittest.TestCase):
     def test_determine_duplicate_records(self):
         # multivar_dev2_OPCtemperature###fafdafjadskfasfadfasf
         f1 = {
-            "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
+            "model_amd64_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fffff",
             "modelName": "multivar_dev2_OPCxxxx",
             "devices": [
@@ -165,7 +165,7 @@ class ModelRecordTest(unittest.TestCase):
         func1 = EdgeFuncConfig(**f1)
 
         f2 = {
-            "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
+            "model_amd64_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "fafdafjadskfasfadfasf",
             "modelName": "multivar_dev2_OPCtemperature",
             "devices": [
@@ -188,7 +188,7 @@ class ModelRecordTest(unittest.TestCase):
         func2 = EdgeFuncConfig(**f2)
 
         f3 = {
-            "model_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
+            "model_amd64_address": "http://10.200.60.18:9000/group1/M00/01/0D/Ch1hQF_5ZN2AeOGUAAAejBbqmSQ670.zip",
             "model_md5": "ggggg",
             "modelName": "multivar_dev2_OPCxxxx",
             "devices": [

@@ -13,7 +13,7 @@ funcs:
     - attrExpression: in data_to_dict['telemetry']
       attrName: pointName
       attrValue: pyboot1
-  modelAddress: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
+  modelAmd64Address: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
   modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
   modelName: industry
 - devices:
@@ -25,7 +25,7 @@ funcs:
     - attrExpression: in data_to_dict['telemetry']
       attrName: pointName
       attrValue: pyboot2
-  modelAddress: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
+  modelAmd64Address: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
   modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
   modelName: test
 mqtts:

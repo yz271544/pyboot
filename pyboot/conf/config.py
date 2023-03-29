@@ -62,7 +62,8 @@ class EdgeFuncConfig(json.JSONEncoder):
 
     def __init__(self, **kwargs):
         super().__init__()
-        self.model_address = kwargs['modelAddress'] if 'modelAddress' in kwargs else ""
+        self.model_amd64_address = kwargs['modelAmd64Address'] if 'modelAmd64Address' in kwargs else ""
+        self.model_arm64_address = kwargs['modelArm64Address'] if 'modelArm64Address' in kwargs else ""
         self.model_md5 = kwargs['modelMd5'] if 'modelMd5' in kwargs else ""
         self.model_name = kwargs['modelName'] if 'modelName' in kwargs else ""
         self.devices = kwargs['devices'] if 'devices' in kwargs else []
@@ -74,9 +75,9 @@ class EdgeFuncConfig(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
     def __repr__(self):
-        return "%s(model_address=%r, model_md5=%r, model_name=%r, " \
+        return "%s(model_amd64_address=%r, model_arm64_address=%r, model_md5=%r, model_name=%r, " \
                "devices=%r)" % (
-                   self.__class__.__name__, self.model_address, self.model_md5, self.model_name, self.devices)
+                   self.__class__.__name__, self.model_amd64_address, self.model_arm64_address, self.model_md5, self.model_name, self.devices)
 
 
 class BaseConfig(json.JSONEncoder):
@@ -185,7 +186,8 @@ class DeviceSchema(marshmallow.Schema):
 
 
 class FuncSchema(marshmallow.Schema):
-    modelAddress = marshmallow.fields.Str()
+    modelAmd64Address = marshmallow.fields.Str()
+    modelArm64Address = marshmallow.fields.Str()
     modelMd5 = marshmallow.fields.Str()
     modelName = marshmallow.fields.Str()
     devices = marshmallow.fields.Nested(DeviceSchema, many=True)
@@ -195,8 +197,8 @@ class FuncSchema(marshmallow.Schema):
         return FuncSchema(**data)
 
     def __repr__(self):
-        return "%s(modelAddress=%r, modelMd5=%r, modelName=%r, devices=%r)" % (
-            self.__class__.__name__, self.modelAddress, self.modelMd5,
+        return "%s(modelAmd64Address=%r, modelArm64Address=%r, modelMd5=%r, modelName=%r, devices=%r)" % (
+            self.__class__.__name__, self.modelAmd64Address, self.modelArm64Address, self.modelMd5,
             self.modelName, self.devices)
 
 

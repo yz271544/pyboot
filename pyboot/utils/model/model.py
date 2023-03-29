@@ -9,6 +9,7 @@
 @ref: @blog:
 """
 import os
+import platform
 import urllib3
 from pyboot.conf import EdgeFuncConfig
 from urllib.parse import urlparse
@@ -46,7 +47,17 @@ def download_by_funcs(funcs: [EdgeFuncConfig]):
 
 def download(http, **kwargs):
     func = kwargs['func']
-    model_compress_file_name = extract_filename_from_url(func.model_address)
+    current_system_arch = recognize_machine_arch()
+    model_address = ""
+    if current_system_arch in ["amd64"]:
+        model_address = func.model_amd64_address
+    elif current_system_arch in ["arm64"]:
+        model_address = func.model_arm64_address
+    else:
+        log.fatal("Unsupport system architecture")
+        exit("Unsupport system architecture")
+
+    model_compress_file_name = extract_filename_from_url(model_address)
 
     download_target_file = os.path.join(MODEL_PATH, model_compress_file_name)
     log.info(download_target_file)
@@ -56,10 +67,10 @@ def download(http, **kwargs):
     else:
         r = None
         try:
-            log.info(f"try download model: {func.model_address}")
+            log.info(f"try download model: {model_address}")
             r = http.request(
                 'GET',
-                func.model_address,
+                model_address,
                 preload_content=False
             )
 
@@ -73,11 +84,45 @@ def download(http, **kwargs):
             log.info("download %s, status: %r, header: %r" % (download_target_file, r.status, r.headers))
             r.release_conn()
         except Exception as e:
-            log.error(f"download model:{func.model_address} failed!", stack_info=True)
+            log.error(f"download model:{model_address} failed!", stack_info=True)
         # finally:
         #     r.release_conn()
     return download_target_file
 
+
+def recognize_machine_arch():
+    match platform.machine():
+        case "i386":
+            return "amd"
+        case "x86":
+            return "amd"
+        case "x32":
+            return "amd"
+        case "AMD64":
+            return "amd64"
+        case "x86_64":
+            return "amd64"
+        case "x64":
+            return "amd64"
+        case "arm":
+            return "arm"
+        case "arm4":
+            return "arm"
+        case "arm5":
+            return "arm"
+        case "arm6":
+            return "arm"
+        case "arm7":
+            return "arm"
+        case "arm64":
+            return "arm64"
+        case "arm8":
+            return "arm64"
+        case "aarch64":
+            return "arm64"
+        case _:
+            return "amd64"
+    
 
 def extract_filename_from_url(url):
     parse_result = urlparse(url)
