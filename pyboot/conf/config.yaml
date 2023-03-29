@@ -13,21 +13,8 @@ funcs:
     - attrExpression: in data_to_dict['telemetry']
       attrName: pointName
       attrValue: pyboot1
-  modelAmd64Address: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
-  modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
-  modelName: industry
-- devices:
-  - deviceName: "三厂-pyboot测试设备2"
-    deviceAttr:
-    - attrExpression: == data_to_dict['deviceInfo']['deviceName']
-      attrName: deviceName
-      attrValue: 三厂-pyboot测试设备2
-    - attrExpression: in data_to_dict['telemetry']
-      attrName: pointName
-      attrValue: pyboot2
-  modelAmd64Address: http://10.200.60.18:9000/group1/M00/49/04/Csg8EmGdnIyAVJdVAAHaY0adxNc829.zip
-  modelMd5: pZ4DJ+YhYM9ppHD+VhLi+A==
-  modelName: test
+  modelAmd64Address: http://localhost:8080/Ch1hQGGkxnSAIiFrAAO8COz2yGE652.zip
+  modelName: multivariate
 mqtts:
 - broker: tcp://192.168.241.1:1883
   name: mosquitto-20336454-5413-4e2f-b52e-b945291359c7

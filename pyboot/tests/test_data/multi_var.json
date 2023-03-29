@@ -1,6 +1,6 @@
 {
     "deviceInfo": {
-        "deviceName": "设备2",
+        "deviceName": "三厂-pyboot测试设备1",
         "edgeDeviceName": "设备three",
         "topic": "GG2",
         "edgeCalculation": false,
@@ -12,10 +12,42 @@
         "RC_cylinder1_1P_d_dispPeak": 86,
         "OPC温度": 10370,
         "OPC湿度": "86",
-        "OPC电量": true
+        "OPC电量": true,
+        "pyboot1": true
     },
     "model_data": {
-        "GS0101": "1.1",
-        "GS0102": "1.2"
+        "timeStamp": 1585726099,
+        "W3.ZY1Q.SU36_6_PRESS_01": 319.491,
+        "W3.ZY1Q.SU36_6_PRESS_02": 330.324,
+        "W3.ZY1Q.SU36_6_PRESS_03": 310.278,
+        "W3.ZY1Q.SU36_6_PRESS_04": 118.598,
+        "W3.ZY1Q.SU36_6_PRESS_05": 118.229,
+        "W3.ZY1Q.SU36_6_PRESS_06": 17.3828,
+        "W3.ZY1Q.SU36_6_PRESS_07": 24.202,
+        "W3.ZY1Q.SU36_6_PRESS_08": 67.2743,
+        "W3.ZY1Q.SU36_6_PRESS_09": 40.5816,
+        "W3.ZY1Q.SU36_6_PRESS_10": 28.0153,
+        "W3.ZY1Q.SU36_6_PRESS_11": 74.2665,
+        "W3.ZY1Q.SU36_6_PRESS_12": 79.6007,
+        "W3.ZY1Q.SU36_6_PRESS_13": 76.8012,
+        "W3.ZY1Q.SU36_6_PRESS_14": 116.6146,
+        "W3.ZY1Q.SU36_6_PRESS_15": 0.703646,
+        "W3.ZY1Q.SU36_6_PRESS_16": 2.42083,
+        "W3.ZY1Q.SU36_6_PRESS_17": 360.822,
+        "W3.ZY1Q.SU36_6_PRESS_18": 2.41719,
+        "W3.ZY1Q.SU36_6_PRESS_19": 0.117593,
+        "TC_P4_d_totalValuePP": 100,
+        "ts": 1608952998,
+        "TC_4Y_d_totalValuePP": 16.65,
+        "TC_3X_d_totalValuePP": 17.85,
+        "TC_4X_d_totalValuePP": 15.66,
+        "ST_2Y_d_totalValuePP": 12.97,
+        "TC_3Y_d_totalValuePP": 18.76,
+        "ST_2X_d_totalValuePP": 19.83,
+        "ST_1X_d_totalValuePP": 16.36,
+        "ST_1Y_d_totalValuePP": 15.52,
+        "ST_P2_d_totalValuePP": 11.22,
+        "TC_P3_d_totalValuePP": 11.12,
+        "ST_P1_d_totalValuePP": 33.13
     }
 }
