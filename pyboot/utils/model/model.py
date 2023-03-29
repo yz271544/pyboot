@@ -101,7 +101,7 @@ def recognize_machine_arch():
     elif sys_arch in ["arm64", "arm8", "aarch64"]:
         return "arm64"
     else:
-        return "amd64"
+        return "unknown"
 
 
 def extract_filename_from_url(url):
