@@ -17,3 +17,14 @@ images:
 .PHONY: image-on-tensorflow
 image-on-tensorflow:
 	docker build -t ${REPO}kubeedge/pyboot-tensorflow:${IMAGE_TAG} -f _build/tensorflow.Dockerfile .
+
+.PHONY: cross-build
+cross-build: cross-build-amd64 cross-build-arm64
+
+.PHONY: cross-build-amd64
+cross-build-amd64:
+	docker buildx build --platform linux/amd64 -t ${REPO}kubeedge/pyboot:${IMAGE_TAG} -f _build/Dockerfile . --push
+
+.PHONY: cross-build-arm64
+cross-build-arm64:
+	docker buildx build --platform linux/arm64 -t ${REPO}kubeedge/pyboot:${IMAGE_TAG} -f _build/Dockerfile-arm64 . --push
