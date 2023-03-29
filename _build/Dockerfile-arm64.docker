@@ -4,13 +4,12 @@ FROM --platform=$TARGETPLATFORM python:3.9.16 as builder
 # FROM --platform=$TARGETPLATFORM arm32v5/python:3.6-slim as builder
 RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
 RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get install apt-utils -y
-RUN apt-get install libgomp1 -y
-RUN apt-get install unzip -y
-RUN apt-get install gfortran -y
-RUN apt-get install gcc-9 -y
-RUN apt-get install gfortran-9 -y
+RUN apt update
+RUN apt install libgomp1 -y
+RUN apt install unzip -y
+RUN apt install gfortran -y
+RUN apt install gcc-9 -y
+RUN apt install gfortran-9 -y
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 40
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 100
 RUN update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-10 40
@@ -64,10 +63,9 @@ RUN pip install -r /home/requirements-arm.txt -i https://pypi.tuna.tsinghua.edu.
 FROM --platform=$TARGETPLATFORM python:3.9.16
 RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
 RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
-RUN apt-get update 
-RUN apt-get install apt-utils -y
-RUN apt-get install libgomp1 -y
-RUN apt-get install unzip -y
+RUN apt update 
+RUN apt install libgomp1 -y
+RUN apt install unzip -y
 
 RUN apt-get install libopenblas-dev liblapack-dev libatlas-base-dev libblas-dev -y
 RUN mkdir ~/.pip
