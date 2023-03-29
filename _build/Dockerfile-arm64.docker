@@ -1,7 +1,7 @@
 #FROM --platform=$TARGETPLATFORM python:3-slim-buster
 #FROM python:3.6-slim
 # FROM --platform=$TARGETPLATFORM python:3.9.16 as builder
-FROM --platform=$TARGETPLATFORM arm32v5/python:3.6-slim
+FROM --platform=$TARGETPLATFORM arm32v5/python:3.6-slim as builder
 RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
 RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
 RUN apt-get update
