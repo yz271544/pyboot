@@ -91,38 +91,18 @@ def download(http, **kwargs):
 
 
 def recognize_machine_arch():
-    match platform.machine():
-        case "i386":
-            return "amd"
-        case "x86":
-            return "amd"
-        case "x32":
-            return "amd"
-        case "AMD64":
-            return "amd64"
-        case "x86_64":
-            return "amd64"
-        case "x64":
-            return "amd64"
-        case "arm":
-            return "arm"
-        case "arm4":
-            return "arm"
-        case "arm5":
-            return "arm"
-        case "arm6":
-            return "arm"
-        case "arm7":
-            return "arm"
-        case "arm64":
-            return "arm64"
-        case "arm8":
-            return "arm64"
-        case "aarch64":
-            return "arm64"
-        case _:
-            return "amd64"
-    
+    sys_arch = platform.machine()
+    if sys_arch in ["i386", "x86", "x32"]:
+        return "amd"
+    elif sys_arch in ["amd64", "AMD64", "x86_64", "x64"]:
+        return "amd64"
+    elif sys_arch in ["arm", "arm4", "arm5", "arm6", "arm7"]:
+        return "arm"
+    elif sys_arch in ["arm64", "arm8", "aarch64"]:
+        return "arm64"
+    else:
+        return "amd64"
+
 
 def extract_filename_from_url(url):
     parse_result = urlparse(url)
