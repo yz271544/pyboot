@@ -27,4 +27,4 @@ cross-build-amd64:
 
 .PHONY: cross-build-arm64
 cross-build-arm64:
-	docker buildx build --platform linux/arm64 -t ${REPO}kubeedge/pyboot:${IMAGE_TAG} -f _build/Dockerfile-arm64 . --push
+	docker buildx build --platform linux/arm/v8 -t ${REPO}kubeedge/pyboot:${IMAGE_TAG} -f _build/Dockerfile-arm64.docker . --push
