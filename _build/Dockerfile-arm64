@@ -4,7 +4,9 @@ FROM --platform=$TARGETPLATFORM python:3.9.16 as builder
 
 RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
 RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
-RUN apt-get update && apt-get install libgomp1 telnet dnsutils unzip -y
+RUN apt-get update
+RUN apt-get install libgomp1 -y
+RUN apt-get install unzip -y
 RUN apt-get install gfortran -y
 RUN apt-get install gcc-9 -y
 RUN apt-get install gfortran-9 -y

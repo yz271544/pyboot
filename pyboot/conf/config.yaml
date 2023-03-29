@@ -13,7 +13,7 @@ funcs:
     - attrExpression: in data_to_dict['telemetry']
       attrName: pointName
       attrValue: pyboot1
-  modelAmd64Address: http://localhost:8080/Ch1hQGGkxnSAIiFrAAO8COz2yGE652.zip
+  modelAmd64Address: http://192.168.241.1:8080/Ch1hQGGkxnSAIiFrAAO8COz2yGE652.zip
   modelName: multivariate
 mqtts:
 - broker: tcp://192.168.241.1:1883
