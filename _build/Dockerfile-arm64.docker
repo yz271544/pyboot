@@ -65,8 +65,6 @@ RUN set -eux && sed -i "s/deb.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources
 RUN sed -i "s/security.debian.org/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
 RUN apt-get update 
 RUN apt-get install libgomp1 -y
-RUN apt-get install telnet -y
-RUN apt-get install dnsutils -y
 RUN apt-get install unzip -y
 
 RUN apt-get install libopenblas-dev liblapack-dev libatlas-base-dev libblas-dev -y
