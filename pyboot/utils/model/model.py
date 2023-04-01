@@ -9,13 +9,14 @@
 @ref: @blog:
 """
 import os
+import re
 import platform
 import urllib3
 from pyboot.conf import EdgeFuncConfig
 from urllib.parse import urlparse
 from pyboot.logger import log
 from pyboot.conf.settings import MODEL_PATH, CHECK_SIZE
-from pyboot.utils.common.compress_utils import un_zip
+from pyboot.utils.common.compress_utils import un_zip, un_gz, un_tar
 from pyboot.utils.model.record import ModelRecord
 
 
@@ -36,7 +37,8 @@ def download_by_funcs(funcs: [EdgeFuncConfig]):
             download_target_file = download(http, func=func)
             uncompress_model_dir = os.path.join(MODEL_PATH, func.model_name)
             try:
-                un_zip(download_target_file, uncompress_model_dir)
+                # un_zip(download_target_file, uncompress_model_dir)
+                _uncompress_according_to_ext_name(download_target_file, uncompress_model_dir)
             except Exception as e:
                 log.error(f"unzip file {download_target_file} failed: {e}", stack_info=True)
             try:
@@ -109,3 +111,22 @@ def extract_filename_from_url(url):
     return os.path.basename(parse_result.path)
 
 
+def _uncompress_according_to_ext_name(file_full_name, uncompress_target_dir):
+    re_regex = r".*.tar.gz$"
+    file_base_name = os.path.basename(file_full_name)
+    file_name_tuple = os.path.splitext(file_base_name)
+    match = re.match(re_regex, file_full_name)
+    if match:
+        un_gz(file_full_name, uncompress_target_dir)
+        un_gz_file_name = file_name_tuple[0]
+        un_gz_file_full_name = os.path.join(uncompress_target_dir, un_gz_file_name)
+        un_tar(un_gz_file_full_name, uncompress_target_dir)
+        os.remove(un_gz_file_full_name)
+    else:
+        ext_name = file_name_tuple[1]
+        if ext_name == ".gz":
+            un_gz(file_full_name, uncompress_target_dir)
+        elif ext_name == ".tar":
+            un_tar(file_full_name, uncompress_target_dir)
+        elif ext_name == ".zip":
+            un_zip(file_full_name, uncompress_target_dir)

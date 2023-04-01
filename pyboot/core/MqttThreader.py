@@ -32,29 +32,15 @@ from pyboot.utils.error.Errors import UnknownArgNum
 
 def edge_model_handle(model_name, in_data_dict):
     # Pickle depends on the module path. So, should make sure that the module index.py is in sys.path.
-    dir_path_root_slice = (str(PYBOOT_HOME).split("/"))[:-1]
-    DIR_PYBOOT = '/'.join(dir_path_root_slice)
-    # print("DIR_PYBOOT:", DIR_PYBOOT)
-    # pkg_path = os.path.join(MODEL_REF_PREFIX, "%s/index" % model_name)
-    # dep_prefix = "%s/%s" % (MODEL_REF_PREFIX, model_name)
-    # pkg_path = "%s/%s/index" % (MODEL_REF_PREFIX, model_name)
-    pkg_path = "%s/%s" % (MODEL_REF_PREFIX, model_name)
-    dir_name = DIR_PYBOOT + "/" + pkg_path
-    # print("dir_name:", dir_name)
-    if dir_name not in sys.path:
-        sys.path.append(dir_name)
-    # os.sep
-    if pkg_path[0] == "/":
+    pkg_path = os.path.join(MODEL_REF_PREFIX, "%s/index" % model_name)
+    if pkg_path[0] == os.sep:
         pkg_path = pkg_path[1:]
-
     # print("pkg_path: %s" % pkg_path)
-    slist = str(pkg_path).split("/") # os.sep
+    slist = str(pkg_path).split(os.sep)
     pkg_name = '.'.join(slist)
-
-    print("pkg_name: %s" % pkg_name)
+    # print("pkg_name: %s" % pkg_name)
     try:
-        importlib.invalidate_caches()
-        model_module = importlib.import_module(".index", pkg_name)
+        model_module = importlib.import_module(pkg_name)
         ret = model_module.handler(in_data_dict, None)
     except ModuleNotFoundError as mnfe:
         msg = f"No module pkg_name: {pkg_name}, {mnfe}"

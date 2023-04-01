@@ -14,7 +14,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # print(os.path.dirname(BASE_DIR))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.dirname(BASE_DIR))
-    
+"""
+must have `from pyboot.brun import starterRegister`
+"""
 from pyboot.brun import starterRegister
 from pyboot.boot import BootApplication
 from pyboot.conf import get_base_conf

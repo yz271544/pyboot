@@ -231,7 +231,7 @@ Currently, python:3.6-slim is used as the basic image;
 docker run --name pyboot-local-test -itd -v /lyndon/iProject/pypath/config/goboot.yml:/etc/edge/goboot.yml -e DOWNLOAD_MODEL="True" docker.gridsumdissector.com/kubeedge/pyboot:v1.0.2 --config /etc/edge/goboot.yml
 
 ## docker buildx build
-docker buildx build --platform=linux/arm64 -t docker.gridsumdissector.com/kubeedge/pyboot:v3.0.0-3-g423bd55 -f _build/Dockerfile-arm64.docker . --load
+docker buildx build --platform=linux/arm64 -t docker.gridsumdissector.com/kubeedge/pyboot:v3.0.0-3-g423bd55 -f _build/Dockerfile-amd64.docker-arm64.docker.docker . --load
 ```
 
 ## TODO
