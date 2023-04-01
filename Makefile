@@ -18,12 +18,14 @@ PLATFORMS ?= linux/amd64,linux/arm64
 # config your docker repository address
 IMAGE_REPO ?= docker.gridsumdissector.com
 
-
-
 .PHONY: images
+images: images-amd64 images-arm64
+
+.PHONY: images-amd64
 images-amd64:
 	docker build -t ${IMAGE_REPO}/kubeedge/pyboot:${IMAGE_TAG} -f _build/Dockerfile-amd64.docker .
 
+.PHONY: images-arm64
 images-arm64:
 	docker build -t ${IMAGE_REPO}/kubeedge/pyboot:${IMAGE_TAG} -f _build/Dockerfile-arm64.docker .
 
