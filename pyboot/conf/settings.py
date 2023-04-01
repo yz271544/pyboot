@@ -45,7 +45,7 @@ SUB_THREAD_TIMEOUT = 120
 
 MAX_QUEUE = 1000
 TIME_OUT = 120
-MAX_EDGE_NUM = 10
+MAX_EDGE_NUM = 1
 
 MAX_PUBLISH_RETRY = 3
 
@@ -64,7 +64,7 @@ except Exception as e:
 try:
     MAX_EDGE_NUM = int(os.environ["MAX_EDGE_NUM"])
 except Exception as e:
-    MAX_EDGE_NUM = 10
+    MAX_EDGE_NUM = 1
     pass
 
 MODEL_RECORD = os.path.join(PYBOOT_HOME, "conf/model_record.txt")

@@ -37,6 +37,7 @@ def download_by_funcs(funcs: [EdgeFuncConfig]):
             download_target_file = download(http, func=func)
             uncompress_model_dir = os.path.join(MODEL_PATH, func.model_name)
             try:
+                log.info("try download model %s" % download_target_file)
                 # un_zip(download_target_file, uncompress_model_dir)
                 _uncompress_according_to_ext_name(download_target_file, uncompress_model_dir)
             except Exception as e:
@@ -117,6 +118,7 @@ def _uncompress_according_to_ext_name(file_full_name, uncompress_target_dir):
     file_name_tuple = os.path.splitext(file_base_name)
     match = re.match(re_regex, file_full_name)
     if match:
+        log.info("uncompres tar.gz %s to %s" % (file_full_name, uncompress_target_dir))
         un_gz(file_full_name, uncompress_target_dir)
         un_gz_file_name = file_name_tuple[0]
         un_gz_file_full_name = os.path.join(uncompress_target_dir, un_gz_file_name)
@@ -125,8 +127,11 @@ def _uncompress_according_to_ext_name(file_full_name, uncompress_target_dir):
     else:
         ext_name = file_name_tuple[1]
         if ext_name == ".gz":
+            log.info("un_gz %s to %s" % (file_full_name, uncompress_target_dir))
             un_gz(file_full_name, uncompress_target_dir)
         elif ext_name == ".tar":
+            log.info("un_tar %s to %s" % (file_full_name, uncompress_target_dir))
             un_tar(file_full_name, uncompress_target_dir)
         elif ext_name == ".zip":
+            log.info("un_zip %s to %s" % (file_full_name, uncompress_target_dir))
             un_zip(file_full_name, uncompress_target_dir)
