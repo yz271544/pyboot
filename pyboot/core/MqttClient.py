@@ -72,7 +72,7 @@ class MqttClient:
             try:
                 client.connect(self.host, self.port)
                 break
-            except ConnectionRefusedError as e:
+            except Exception as e:
                 log.error(f"connection mqtt {self.host}:{self.port} refuse error:{e}", stack_info=True)
                 time.sleep(5)
                 continue
