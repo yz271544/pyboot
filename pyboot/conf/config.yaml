@@ -15,6 +15,17 @@ funcs:
       attrValue: pyboot1
   modelAmd64Address: http://192.168.241.1:8080/Ch1hQGGkxnSAIiFrAAO8COz2yGE652.zip
   modelName: multivariate
+- devices:
+  - deviceName: "三厂-pyboot测试设备1"
+    deviceAttr:
+    - attrExpression: == data_to_dict['deviceInfo']['deviceName']
+      attrName: deviceName
+      attrValue: 设备3
+    - attrExpression: in data_to_dict['telemetry']
+      attrName: pointName
+      attrValue: RC_cylinder1_1P_d_dispPeak
+  modelAmd64Address: http://192.168.241.1:8080/trend_detection.zip
+  modelName: trend_detection
 mqtts:
 - broker: tcp://192.168.241.1:1883
   name: mosquitto-20336454-5413-4e2f-b52e-b945291359c7

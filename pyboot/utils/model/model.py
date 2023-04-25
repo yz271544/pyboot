@@ -16,7 +16,7 @@ from pyboot.conf import EdgeFuncConfig
 from urllib.parse import urlparse
 from pyboot.logger import log
 from pyboot.conf.settings import MODEL_PATH, CHECK_SIZE
-from pyboot.utils.common.compress_utils import un_zip, un_gz, un_tar
+from pyboot.utils.common.compress_utils import un_zip, un_gz, un_tar, up_file_from_just_one_dir
 from pyboot.utils.model.record import ModelRecord
 
 
@@ -40,6 +40,7 @@ def download_by_funcs(funcs: [EdgeFuncConfig]):
                 log.info("try download model %s" % download_target_file)
                 # un_zip(download_target_file, uncompress_model_dir)
                 _uncompress_according_to_ext_name(download_target_file, uncompress_model_dir)
+                up_file_from_just_one_dir(uncompress_model_dir)
             except Exception as e:
                 log.error(f"unzip file {download_target_file} failed: {e}", stack_info=True)
             try:

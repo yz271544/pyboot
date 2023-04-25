@@ -9,6 +9,7 @@
 @ref: @blog:
 """
 import os
+import shutil
 import gzip
 import tarfile
 import zipfile
@@ -97,3 +98,29 @@ def in_tar(source_dir, target_full_tar):
             fullpath = os.path.join(root, file)
             tar.add(fullpath, arcname=file)
     tar.close()
+
+
+def up_file_from_just_one_dir(origin_target_dir):
+    print(f"origin_target_dir:{origin_target_dir}")
+    directory_num = 0
+    element_num = 0
+    just_one_dir = ""
+    for f in os.listdir(origin_target_dir):
+        print(f)
+        element_num += 1
+        sub_element_full_path = os.path.join(origin_target_dir, f)
+        just_one_dir = sub_element_full_path
+        print(f"sub_element_full_path:{sub_element_full_path}")
+        if os.path.isdir(sub_element_full_path):
+            directory_num += 1
+    print(f"directory num is {directory_num}")
+    print(f"element num is {element_num}")
+    if directory_num == 1 and element_num == 1:
+        move_up_files(just_one_dir, origin_target_dir)
+
+
+def move_up_files(origin_source_dir, origin_target_dir):
+    for f in os.listdir(origin_source_dir):
+        origin_full_dir = os.path.join(origin_source_dir, f)
+        print(f"move {origin_full_dir} to {origin_target_dir}")
+        shutil.move(origin_full_dir, origin_target_dir)
