@@ -10,6 +10,7 @@
 """
 import time
 import random
+import socket
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.packettypes import PacketTypes
 from pyboot.conf.settings import MAX_PUBLISH_RETRY
@@ -68,6 +69,18 @@ class MqttClient:
         if self.on_message is not None:
             client.on_message = self.on_message
         client.on_log = on_log
+
+        # dns resolver
+        while True:
+            try:
+                addr = socket.gethostbyname(self.host)
+                log.info("resolve the host ip:" + addr)
+                break
+            except Exception as e:
+                log.error("resolve host ip failed:" + str(e))
+                time.sleep(3000)
+                continue
+
         while True:
             try:
                 client.connect(self.host, self.port)
